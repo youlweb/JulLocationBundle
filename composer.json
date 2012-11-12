@@ -1,0 +1,25 @@
+{
+    "name": "jul/location-bundle",
+    "type": "symfony-bundle",
+    "description": "Provides a location management system to use in conjonction with a map API",
+    "keywords": ["location", "city", "state", "country"],
+    "homepage": "http://github.com/youlweb/JulLocationBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bob Dope",
+            "email": "bob.dope@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.1"
+    },
+    "require-dev": {
+        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+    },
+    "autoload": {
+        "psr-0": { "Jul\\LocationBundle": "" }
+    },
+    "minimum-stability": "dev",
+    "target-dir": "Jul/LocationBundle"
+}
