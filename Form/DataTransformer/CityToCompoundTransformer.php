@@ -3,13 +3,13 @@
 // Transforms the City field type compound into City entity
 // Verifies if entity already exists before persisting
 
-namespace Jul\LyfyBundle\Form\DataTransformer;
+namespace Jul\LocationBundle\Form\DataTransformer;
 
-use Jul\LyfyBundle\Entity\Country;
+use Jul\LocationBundle\Entity\Country;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LyfyBundle\Entity\City;
+use Jul\LocationBundle\Entity\City;
 
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -57,7 +57,7 @@ class CityToCompoundTransformer implements DataTransformerInterface
 		// Check if city exists
 		
 		$cityDB = $this->om
-		->getRepository('JulLyfyBundle:City')
+		->getRepository('JulLocationBundle:City')
 		->findOneByFullname( $city->getFullname() );
 		
 		if( $cityDB ) // if city exists
@@ -83,7 +83,7 @@ class CityToCompoundTransformer implements DataTransformerInterface
 		$country = $city->getCountry();
 		
 		$countryDB = $this->om
-		->getRepository('JulLyfyBundle:Country')
+		->getRepository('JulLocationBundle:Country')
 		->findOneBy( array( 'name' => $country->getName(), 'code' => $country->getCode() ));
 		
 		if( $countryDB ) // if country exists
@@ -114,7 +114,7 @@ class CityToCompoundTransformer implements DataTransformerInterface
 			if( $countryDB ) // if known country, might be known state too
 			{
 				$stateDB = $this->om
-				->getRepository('JulLyfyBundle:State')
+				->getRepository('JulLocationBundle:State')
 				->findOneBy( array( 'name' => $stateName, 'code' => $state->getCode(), 'country' => $country ));
 			}
 			

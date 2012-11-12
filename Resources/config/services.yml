@@ -1,7 +1,7 @@
 services:
 
     form.type.cityField:
-            class: Jul\LyfyBundle\Form\Type\CityType
+            class: Jul\LocationBundle\Form\Type\CityType
             arguments: ["@doctrine.orm.entity_manager"]
             tags:
                 - { name: form.type, alias: cityField }

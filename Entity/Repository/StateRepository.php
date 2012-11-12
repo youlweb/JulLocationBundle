@@ -1,6 +1,6 @@
 <?php
 
-namespace Jul\LyfyBundle\Entity\Repository;
+namespace Jul\LocationBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

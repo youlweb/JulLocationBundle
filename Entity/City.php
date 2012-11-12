@@ -2,14 +2,14 @@
 
 // City entity
 
-namespace Jul\LyfyBundle\Entity;
+namespace Jul\LocationBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Jul\LyfyBundle\Entity\Repository\CityRepository")
+ * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\CityRepository")
  * 
  * @author julien
  *
@@ -147,10 +147,10 @@ class City
     /**
      * Set state
      *
-     * @param Jul\LyfyBundle\Entity\State $state
+     * @param Jul\LocationBundle\Entity\State $state
      * @return City
      */
-    public function setState(\Jul\LyfyBundle\Entity\State $state = null)
+    public function setState(\Jul\LocationBundle\Entity\State $state = null)
     {
     	$this->state = $state;
     
@@ -160,7 +160,7 @@ class City
     /**
      * Get state
      *
-     * @return Jul\LyfyBundle\Entity\State
+     * @return Jul\LocationBundle\Entity\State
      */
     public function getState()
     {
@@ -170,10 +170,10 @@ class City
     /**
      * Set country
      *
-     * @param Jul\LyfyBundle\Entity\Country $country
+     * @param Jul\LocationBundle\Entity\Country $country
      * @return City
      */
-    public function setCountry(\Jul\LyfyBundle\Entity\Country $country = null)
+    public function setCountry(\Jul\LocationBundle\Entity\Country $country = null)
     {
         $this->country = $country;
     
@@ -183,7 +183,7 @@ class City
     /**
      * Get country
      *
-     * @return Jul\LyfyBundle\Entity\Country 
+     * @return Jul\LocationBundle\Entity\Country 
      */
     public function getCountry()
     {

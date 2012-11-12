@@ -2,9 +2,9 @@
 
 // Country form
 
-namespace Jul\LyfyBundle\Form\Type;
+namespace Jul\LocationBundle\Form\Type;
 
-use Jul\LyfyBundle\Entity\Country;
+use Jul\LocationBundle\Entity\Country;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,7 +23,7 @@ class CountryType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LyfyBundle\Entity\Country'
+			'data_class' => 'Jul\LocationBundle\Entity\Country'
 		));
 	}
 	

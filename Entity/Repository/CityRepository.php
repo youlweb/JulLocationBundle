@@ -1,6 +1,6 @@
 <?php
 
-namespace Jul\LyfyBundle\Entity\Repository;
+namespace Jul\LocationBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -25,7 +25,7 @@ class CityRepository extends EntityRepository
 		// NOT CURRENTLY IN USE ANYWHERE, just good example of join query
 		
 		$query = $this->getEntityManager()
-		->createQuery( "SELECT c FROM Jul\LyfyBundle\Entity\City c JOIN c.state s JOIN c.country y WHERE c.name = :city AND s.name = :state AND y.name = :country");
+		->createQuery( "SELECT c FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN c.country y WHERE c.name = :city AND s.name = :state AND y.name = :country");
 		
 		$query->setParameters(array(
 				'city' => $city,

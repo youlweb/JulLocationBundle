@@ -2,15 +2,15 @@
 
 // City custom field type
 
-namespace Jul\LyfyBundle\Form\Type;
+namespace Jul\LocationBundle\Form\Type;
 
-use Jul\LyfyBundle\Entity\City;
+use Jul\LocationBundle\Entity\City;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LyfyBundle\Form\DataTransformer\CityToCompoundTransformer;
+use Jul\LocationBundle\Form\DataTransformer\CityToCompoundTransformer;
 
 class CityType extends AbstractType
 {
@@ -45,7 +45,7 @@ class CityType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LyfyBundle\Entity\City',
+			'data_class' => 'Jul\LocationBundle\Entity\City',
 			'cascade_validation' => true,
 			
 		));

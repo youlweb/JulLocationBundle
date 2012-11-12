@@ -2,13 +2,13 @@
 
 // State entity
 
-namespace Jul\LyfyBundle\Entity;
+namespace Jul\LocationBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Jul\LyfyBundle\Entity\Repository\StateRepository")
+ * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\StateRepository")
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "code"})})
  * 
  * @author julien
@@ -130,10 +130,10 @@ class State
     /**
      * Set country
      *
-     * @param Jul\LyfyBundle\Entity\Country $country
+     * @param Jul\LocationBundle\Entity\Country $country
      * @return State
      */
-    public function setCountry(\Jul\LyfyBundle\Entity\Country $country = null)
+    public function setCountry(\Jul\LocationBundle\Entity\Country $country = null)
     {
         $this->country = $country;
     
@@ -143,7 +143,7 @@ class State
     /**
      * Get country
      *
-     * @return Jul\LyfyBundle\Entity\Country 
+     * @return Jul\LocationBundle\Entity\Country 
      */
     public function getCountry()
     {

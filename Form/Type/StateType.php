@@ -2,9 +2,9 @@
 
 // State form
 
-namespace Jul\LyfyBundle\Form\Type;
+namespace Jul\LocationBundle\Form\Type;
 
-use Jul\LyfyBundle\Entity\State;
+use Jul\LocationBundle\Entity\State;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,7 +23,7 @@ class StateType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LyfyBundle\Entity\State'
+			'data_class' => 'Jul\LocationBundle\Entity\State'
 		));
 	}
 	
