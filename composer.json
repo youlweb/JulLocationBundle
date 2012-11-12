@@ -12,10 +12,9 @@
         }
     ],
     "require": {
-        "php": ">=5.3.1"
-    },
-    "require-dev": {
-        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+        "php": ">=5.3.1",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
+        "stof/doctrine-extensions-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Jul\\LocationBundle": "" }
