@@ -59,6 +59,6 @@ class CityType extends AbstractType
 
 	public function getName()
 	{
-		return 'cityField';
+		return 'JulCityField';
 	}
 }
