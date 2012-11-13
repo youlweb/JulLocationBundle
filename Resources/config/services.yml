@@ -1,7 +1,25 @@
 services:
-
-    form.type.cityField:
+    
+    form.type.JulLocationField:
+            class: Jul\LocationBundle\Form\Type\LocationType
+            arguments: ["@doctrine.orm.entity_manager"]
+            tags:
+                - { name: form.type, alias: JulLocationField }
+    
+    form.type.JulCityField:
             class: Jul\LocationBundle\Form\Type\CityType
             arguments: ["@doctrine.orm.entity_manager"]
             tags:
-                - { name: form.type, alias: cityField }
+                - { name: form.type, alias: JulCityField }
+    
+    #form.type.JulStateField:
+    #        class: Jul\LocationBundle\Form\Type\StateType
+    #        arguments: ["@doctrine.orm.entity_manager"]
+    #        tags:
+    #            - { name: form.type, alias: JulStateField }
+                
+    #form.type.JulCountryField:
+    #        class: Jul\LocationBundle\Form\Type\CountryType
+    #        arguments: ["@doctrine.orm.entity_manager"]
+    #        tags:
+    #            - { name: form.type, alias: JulCountryField }

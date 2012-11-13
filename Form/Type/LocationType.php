@@ -1,18 +1,18 @@
 <?php 
 
-// City custom field type
+// Location field
 
 namespace Jul\LocationBundle\Form\Type;
 
-use Jul\LocationBundle\Entity\City;
+use Jul\LocationBundle\Entity\Location;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LocationBundle\Form\DataTransformer\CityToObjectTransformer;
+use Jul\LocationBundle\Form\DataTransformer\LocationToObjectTransformer;
 
-class CityType extends AbstractType
+class LocationType extends AbstractType
 {
 	/**
 	 * @var ObjectManager;
@@ -29,16 +29,17 @@ class CityType extends AbstractType
 	
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$transformer = new CityToObjectTransformer($this->om);
+		$transformer = new LocationToObjectTransformer($this->om);
 		
 		$builder
-			->add( 'fullname', 'text', array( 'label' => 'City', 'attr' => array( 'placeholder' => 'City' )))
+			
 			->add( 'name', 'hidden', array( 'error_bubbling' => false ) )
-			->add( 'postcode', 'hidden' )
+			->add( 'fullname', 'text', array( 'label' => 'City', 'attr' => array( 'placeholder' => 'City' )))
+			->add( 'address' )
 			->add( 'latitude', 'hidden' )
 			->add( 'longitude', 'hidden' )
-			->add( 'state', new StateType() )
-			->add( 'country', new CountryType() )
+			
+			->add( 'city', 'JulCityField' )
 			->addModelTransformer($transformer);
 		;
 	}
@@ -46,9 +47,8 @@ class CityType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LocationBundle\Entity\City',
-			'cascade_validation' => true,
-			
+			'data_class' => 'Jul\LocationBundle\Entity\Location',
+			'cascade_validation' => true
 		));
 	}
 	
@@ -59,6 +59,6 @@ class CityType extends AbstractType
 
 	public function getName()
 	{
-		return 'cityField';
+		return 'JulLocationField';
 	}
 }
