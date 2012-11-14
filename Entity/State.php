@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\StateRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "code"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
  * @author julien
  *
@@ -24,18 +24,23 @@ class State
 	private $id;
 	
 	/**
-	 * @ORM\Column(length=128)
+	 * @ORM\Column(length=128, nullable=true)
 	 */
 	private $name;
 	
 	/**
-	 * @Gedmo\Slug(fields={"name"}, style="camel", unique=false)
+	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 */
+	private $fullname;
+	
+	/**
+	 * @Gedmo\Slug(fields={"fullname"}, style="camel", unique=false)
 	 * @ORM\Column(length=128, nullable=true)
 	 */
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=2)
+	 * @ORM\Column(length=2, nullable=true)
 	 */
 	private $code;
 	
@@ -44,10 +49,20 @@ class State
 	 */
 	private $country;
 	
+	/**
+	 * @ORM\Column(type="float", nullable=true)
+	 */
+	private $latitude;
+	
+	/**
+	 * @ORM\Column(type="float", nullable=true)
+	 */
+	private $longitude;
+	
 	
 	// ---------------------------------------
 	
-	
+
     /**
      * Get id
      *
@@ -62,7 +77,7 @@ class State
      * Set name
      *
      * @param string $name
-     * @return Country
+     * @return State
      */
     public function setName($name)
     {
@@ -82,10 +97,33 @@ class State
     }
 
     /**
+     * Set fullname
+     *
+     * @param string $fullname
+     * @return State
+     */
+    public function setFullname($fullname)
+    {
+        $this->fullname = $fullname;
+    
+        return $this;
+    }
+
+    /**
+     * Get fullname
+     *
+     * @return string 
+     */
+    public function getFullname()
+    {
+        return $this->fullname;
+    }
+
+    /**
      * Set slug
      *
      * @param string $slug
-     * @return Country
+     * @return State
      */
     public function setSlug($slug)
     {
@@ -103,12 +141,12 @@ class State
     {
         return $this->slug;
     }
-	
+
     /**
      * Set code
      *
      * @param string $code
-     * @return Country
+     * @return State
      */
     public function setCode($code)
     {
@@ -128,9 +166,55 @@ class State
     }
 
     /**
+     * Set latitude
+     *
+     * @param float $latitude
+     * @return State
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get latitude
+     *
+     * @return float 
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set longitude
+     *
+     * @param float $longitude
+     * @return State
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get longitude
+     *
+     * @return float 
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
      * Set country
      *
-     * @param Jul\LocationBundle\Entity\Country $country
+     * @param \Jul\LocationBundle\Entity\Country $country
      * @return State
      */
     public function setCountry(\Jul\LocationBundle\Entity\Country $country = null)
@@ -143,7 +227,7 @@ class State
     /**
      * Get country
      *
-     * @return Jul\LocationBundle\Entity\Country 
+     * @return \Jul\LocationBundle\Entity\Country 
      */
     public function getCountry()
     {

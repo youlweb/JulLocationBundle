@@ -12,4 +12,53 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocationRepository extends EntityRepository
 {
+	/**
+	 * Find a Location using a Location name, City name, State name, and a Country name
+	 *
+	 * @param string $locationName
+	 * @param string $locationAddress
+	 * @param string $cityName
+	 * @param string $stateName
+	 * @param string $countryName
+	 *
+	 * @return City
+	 */
+	public function getOneByLocationName( $locationName, $locationAddress, $cityName, $stateName, $countryName )
+	{
+		if( $stateName === null )
+		{
+			/*
+			 * The State name can be NULL
+			*/
+	
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT l,c,s,y FROM Jul\LocationBundle\Entity\Location l JOIN l.city c JOIN c.state s JOIN s.country y WHERE l.name = :location AND l.address = :address AND c.name = :city AND s.name IS NULL AND y.name = :country");
+	
+			$query->setParameters(array(
+					'location' => $locationName,
+					'address' => $locationAddress,
+					'city'	=> $cityName,
+					'country' => $countryName
+			));
+		}
+		else
+		{
+			/*
+			 * With a specific State name
+			*/
+	
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT l,c,s,y FROM Jul\LocationBundle\Entity\Location l JOIN l.city c JOIN c.state s JOIN s.country y WHERE l.name = :location AND l.address = :address AND c.name = :city AND s.name = :state AND y.name = :country");
+	
+			$query->setParameters(array(
+					'location' => $locationName,
+					'address' => $locationAddress,
+					'city' => $cityName,
+					'state' => $stateName,
+					'country' => $countryName
+			));
+		}
+	
+		return $query->getOneOrNullResult();
+	}
 }

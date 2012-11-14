@@ -1,6 +1,6 @@
 <?php 
 
-// City custom field type
+// City field
 
 namespace Jul\LocationBundle\Form\Type;
 
@@ -20,25 +20,34 @@ class CityType extends AbstractType
 	private $om;
 	
 	/**
+	 * Options sent via config
+	 * 
+	 * @var array
+	 */
+	private $configOptions;
+	
+	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct(ObjectManager $om, $configOptions)
 	{
 		$this->om = $om;
+		$this->configOptions = $configOptions;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$transformer = new CityToObjectTransformer($this->om);
 		
+		$arrayFields = array( 'name', 'fullname', 'postcode', 'latitude', 'longitude' );
+		
+		foreach( $arrayFields as $field )
+		{
+			$builder->add( $field, $this->configOptions[$field]['type'], $this->configOptions[$field]['options'] );
+		}
+		
 		$builder
-			->add( 'fullname', 'text', array( 'label' => 'City', 'attr' => array( 'placeholder' => 'City' )))
-			->add( 'name', 'hidden', array( 'error_bubbling' => false ) )
-			->add( 'postcode', 'hidden' )
-			->add( 'latitude', 'hidden' )
-			->add( 'longitude', 'hidden' )
-			->add( 'state', new StateType() )
-			->add( 'country', new CountryType() )
+			->add( 'state', 'JulStateField' )
 			->addModelTransformer($transformer);
 		;
 	}
@@ -47,8 +56,7 @@ class CityType extends AbstractType
 	{
 		$resolver->setDefaults(array(
 			'data_class' => 'Jul\LocationBundle\Entity\City',
-			'cascade_validation' => true,
-			
+			'cascade_validation' => true
 		));
 	}
 	

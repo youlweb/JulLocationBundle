@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\CityRepository")
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "postcode"})})
  * 
  * @author julien
  *
@@ -25,13 +26,12 @@ class City
 	
 	/**
 	 * @ORM\Column(length=128)
-	 * @Assert\NotBlank(message="Please select a city")
+	 * @Assert\NotBlank
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(length=255, unique=true)
-	 * @Assert\NotBlank
+	 * @ORM\Column(length=255, unique=true, nullable=true)
 	 */
 	private $fullname;
 	
@@ -42,7 +42,8 @@ class City
 	private $slug;
 	
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
+	 * @ORM\Column(type="integer")
+	 * @Assert\NotBlank
 	 */
 	private $postcode;
 	
@@ -52,17 +53,12 @@ class City
 	private $state;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="Country")
-	 */
-	private $country;
-	
-	/**
-	 * @ORM\Column(type="float")
+	 * @ORM\Column(type="float", nullable=true)
 	 */
 	private $latitude;
 	
 	/**
-	 * @ORM\Column(type="float")
+	 * @ORM\Column(type="float", nullable=true)
 	 */
 	private $longitude;
 	
@@ -70,6 +66,7 @@ class City
 	// ------------------------------------------------------
 	
     
+
     /**
      * Get id
      *
@@ -102,7 +99,7 @@ class City
     {
         return $this->name;
     }
-	
+
     /**
      * Set fullname
      *
@@ -111,21 +108,21 @@ class City
      */
     public function setFullname($fullname)
     {
-    	$this->fullname = $fullname;
+        $this->fullname = $fullname;
     
-    	return $this;
+        return $this;
     }
-    
+
     /**
      * Get fullname
      *
-     * @return string
+     * @return string 
      */
     public function getFullname()
     {
-    	return $this->fullname;
+        return $this->fullname;
     }
-    
+
     /**
      * Set slug
      *
@@ -150,98 +147,6 @@ class City
     }
 
     /**
-     * Set state
-     *
-     * @param Jul\LocationBundle\Entity\State $state
-     * @return City
-     */
-    public function setState(\Jul\LocationBundle\Entity\State $state = null)
-    {
-    	$this->state = $state;
-    
-    	return $this;
-    }
-    
-    /**
-     * Get state
-     *
-     * @return Jul\LocationBundle\Entity\State
-     */
-    public function getState()
-    {
-    	return $this->state;
-    }
-    
-    /**
-     * Set country
-     *
-     * @param Jul\LocationBundle\Entity\Country $country
-     * @return City
-     */
-    public function setCountry(\Jul\LocationBundle\Entity\Country $country = null)
-    {
-        $this->country = $country;
-    
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return Jul\LocationBundle\Entity\Country 
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-	
-    /**
-     * Set latitude
-     *
-     * @param float $latitude
-     * @return City
-     */
-    public function setLatitude($latitude)
-    {
-    	$this->latitude = $latitude;
-    
-    	return $this;
-    }
-    
-    /**
-     * Get latitude
-     *
-     * @return float
-     */
-    public function getLatitude()
-    {
-    	return $this->latitude;
-    }
-    
-    /**
-     * Set longitude
-     *
-     * @param float $longitude
-     * @return City
-     */
-    public function setLongitude($longitude)
-    {
-    	$this->longitude = $longitude;
-    
-    	return $this;
-    }
-    
-    /**
-     * Get longitude
-     *
-     * @return float
-     */
-    public function getLongitude()
-    {
-    	return $this->longitude;
-    }
-
-    /**
      * Set postcode
      *
      * @param integer $postcode
@@ -262,5 +167,74 @@ class City
     public function getPostcode()
     {
         return $this->postcode;
+    }
+
+    /**
+     * Set latitude
+     *
+     * @param float $latitude
+     * @return City
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get latitude
+     *
+     * @return float 
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set longitude
+     *
+     * @param float $longitude
+     * @return City
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get longitude
+     *
+     * @return float 
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * Set state
+     *
+     * @param \Jul\LocationBundle\Entity\State $state
+     * @return City
+     */
+    public function setState(\Jul\LocationBundle\Entity\State $state = null)
+    {
+        $this->state = $state;
+    
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return \Jul\LocationBundle\Entity\State 
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }

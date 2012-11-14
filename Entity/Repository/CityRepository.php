@@ -2,6 +2,8 @@
 
 namespace Jul\LocationBundle\Entity\Repository;
 
+use Jul\LocationBundle\Entity\City;
+
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,26 +15,46 @@ use Doctrine\ORM\EntityRepository;
 class CityRepository extends EntityRepository
 {
 	/**
-	 * Retrieve a city by its name, statename, countryname
+	 * Find a City using a City name, State name, and a Country name
 	 * 
-	 * @param string $city
-	 * @param string $state
-	 * @param string $country
+	 * @param string $cityName
+	 * @param string $stateName
+	 * @param string $countryName
+	 * 
+	 * @return City
 	 */
-	public function getByCityStateCountry( $city, $state, $country )
+	public function getOneByCityName( $cityName, $stateName, $countryName )
 	{
+		if( $stateName === null )
+		{
+			/*
+			 * The State name can be NULL
+			*/
+				
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT c,s,y FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE c.name = :city AND s.name IS NULL AND y.name = :country");
 		
-		// NOT CURRENTLY IN USE ANYWHERE, just good example of join query
+			$query->setParameters(array(
+					'city'	=> $cityName,
+					'country' => $countryName
+			));
+		}
+		else
+		{
+			/*
+			 * With a specific State name
+			*/
+				
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT c,s,y FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE c.name = :city AND s.name = :state AND y.name = :country");
+				
+			$query->setParameters(array(
+					'city' => $cityName,
+					'state' => $stateName,
+					'country' => $countryName
+			));
+		}
 		
-		$query = $this->getEntityManager()
-		->createQuery( "SELECT c FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN c.country y WHERE c.name = :city AND s.name = :state AND y.name = :country");
-		
-		$query->setParameters(array(
-				'city' => $city,
-				'state' => $state,
-				'country' => $country
-		));
-	
 		return $query->getOneOrNullResult();
 	}
 }

@@ -22,7 +22,15 @@ class JulLocationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
+        //print_r( $config );
+        //exit;
+        
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        
+        $container->setParameter('jul_location.locationOptions', $config['inputFields']['Location']);
+        $container->setParameter('jul_location.cityOptions', $config['inputFields']['City']);
+        $container->setParameter('jul_location.stateOptions', $config['inputFields']['State']);
+        $container->setParameter('jul_location.countryOptions', $config['inputFields']['Country']);
     }
 }

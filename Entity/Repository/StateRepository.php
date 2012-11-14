@@ -2,6 +2,8 @@
 
 namespace Jul\LocationBundle\Entity\Repository;
 
+use Jul\LocationBundle\Entity\State;
+
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,5 +14,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class StateRepository extends EntityRepository
 {
-	
+	/**
+	 * Find a State using a State name and a Country name
+	 * 
+	 * @param string $stateName
+	 * @param string $countryName
+	 * 
+	 * @return State
+	 */
+	public function getOneByStateName( $stateName, $countryName )
+	{	
+		if( $stateName === null )
+		{
+			/*
+			 * The State name can be NULL
+			 */
+			
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT s,c FROM Jul\LocationBundle\Entity\State s JOIN s.country c WHERE s.name IS NULL AND c.name = :country");
+				
+			$query->setParameters(array(
+					'country' => $countryName
+			));
+		}
+		else
+		{
+			/*
+			 * With a specific State name
+			 */
+			
+			$query = $this->getEntityManager()
+			->createQuery( "SELECT s,c FROM Jul\LocationBundle\Entity\State s JOIN s.country c WHERE s.name = :state AND c.name = :country");
+			
+			$query->setParameters(array(
+					'state' => $stateName,
+					'country' => $countryName
+			));
+		}
+		
+		return $query->getOneOrNullResult();
+	}
 }

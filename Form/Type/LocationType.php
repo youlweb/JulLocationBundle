@@ -20,25 +20,33 @@ class LocationType extends AbstractType
 	private $om;
 	
 	/**
+	 * Options sent via config
+	 * 
+	 * @var array
+	 */
+	private $configOptions;
+	
+	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct(ObjectManager $om, $locationOptions)
 	{
 		$this->om = $om;
+		$this->locationOptions = $locationOptions;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$transformer = new LocationToObjectTransformer($this->om);
 		
+		$arrayFields = array( 'name', 'fullname', 'address', 'latitude', 'longitude' );
+		
+		foreach( $arrayFields as $field )
+		{
+			$builder->add( $field, $this->locationOptions[$field]['type'], $this->locationOptions[$field]['options'] );
+		}
+		
 		$builder
-			
-			->add( 'name', 'hidden', array( 'error_bubbling' => false ) )
-			->add( 'fullname', 'text', array( 'label' => 'City', 'attr' => array( 'placeholder' => 'City' )))
-			->add( 'address' )
-			->add( 'latitude', 'hidden' )
-			->add( 'longitude', 'hidden' )
-			
 			->add( 'city', 'JulCityField' )
 			->addModelTransformer($transformer);
 		;

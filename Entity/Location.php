@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\LocationRepository")
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
  * @author julien
  *
@@ -25,13 +26,12 @@ class Location
 	
 	/**
 	 * @ORM\Column(length=128)
-	 * @Assert\NotBlank(message="Please select a city")
+	 * @Assert\NotBlank
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(length=255, unique=true)
-	 * @Assert\NotBlank
+	 * @ORM\Column(length=255, unique=true, nullable=true)
 	 */
 	private $fullname;
 	
@@ -42,7 +42,8 @@ class Location
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=255, nullable=true)
+	 * @ORM\Column(length=255)
+	 * @Assert\NotBlank
 	 */
 	private $address;
 	
@@ -52,18 +53,20 @@ class Location
 	private $city;
 	
 	/**
-	 * @ORM\Column(type="float")
+	 * @ORM\Column(type="float", nullable=true)
 	 */
 	private $latitude;
 	
 	/**
-	 * @ORM\Column(type="float")
+	 * @ORM\Column(type="float", nullable=true)
 	 */
 	private $longitude;
 	
 	
 	// ------------------------------------------------------
 	
+
+    
 
     /**
      * Get id

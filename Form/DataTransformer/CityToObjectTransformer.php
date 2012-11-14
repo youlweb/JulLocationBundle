@@ -1,14 +1,16 @@
 <?php 
 
-// Processes the City entity for consistency with State & Country entities
-// Verifies if entities already exist before persisting
-
 namespace Jul\LocationBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
+/**
+ * Persist / update a City entity, checking for subclasses duplicates
+ *
+ * @author julien
+ *
+ */
 class CityToObjectTransformer implements DataTransformerInterface
 {
 	/**
@@ -48,102 +50,38 @@ class CityToObjectTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($city)
 	{
-		if( $city->getName() === null ) return $city;
+		if( ( $cityName = $city->getName() ) === null ) return $city;
 		
-		// Check if city exists
+		/**
+		 * --------------------
+		 * Check if City exists
+		 */
 		
-		$cityDB = $this->om
-		->getRepository('JulLocationBundle:City')
-		->findOneByFullname( $city->getFullname() );
+		$cityDB = $this	->om
+						->getRepository('JulLocationBundle:City')
+						->getOneByCityName( $cityName, $city->getState()->getName(), $city->getState()->getCountry()->getName() );
 		
-		if( $cityDB ) // if city exists
+		if( $cityDB )
 		{
-			// if UPDATE, we reset the current City to its DB state before returning the City we just found
-			if( $this->om->contains($city) ) $this->om->refresh($city);
-			
+			// if found in DB
+				
+			if( $this->om->contains($city) )
+			{
+				// if entity is already managed ( update ) restore the DB entity to its original state
+		
+				$this->om->refresh($city);
+			}
+		
 			return $cityDB;
 		}
-		elseif( $this->om->contains($city) ) // if new city
+		elseif( $this->om->contains($city) )
 		{
-			// if UPDATE, we clone the current City, persist the clone, and return the old one to its DB state
-			
+			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
+		
 			$newCity = clone $city;
-			$newCity->setSlug(null); // otherwise won't trigger Gedmo
-			$this->om->persist($newCity);
+			$newCity->setSlug(null);	// to trigger Gedmo slug
 			$this->om->detach($city);
 			$city = $newCity;
-		}
-		
-		// Check if country exists
-		
-		$country = $city->getCountry();
-		
-		$countryDB = $this->om
-		->getRepository('JulLocationBundle:Country')
-		->findOneBy( array( 'name' => $country->getName(), 'code' => $country->getCode() ));
-		
-		if( $countryDB ) // if country exists
-		{
-			// if UPDATE, we return Country to its DB state
-			if( $this->om->contains($country) ) $this->om->refresh($country);
-			
-			$city->setCountry($countryDB);
-		}
-		elseif( $this->om->contains($country) ) // if new country & UPDATING
-		{
-			$newCountry = clone $country;
-			$newCountry->setSlug(null);
-			$this->om->persist($newCountry);
-			$city->setCountry($newCountry);
-			$this->om->detach($country);
-			
-		} else $this->om->persist($country); // new country & CREATING
-		
-		// Check if state exists
-		
-		$state = $city->getState();
-		
-		if( ( $stateName = $state->getName() ) !== null )
-		{
-			$country = $city->getCountry();
-			
-			if( $countryDB ) // if known country, might be known state too
-			{
-				$stateDB = $this->om
-				->getRepository('JulLocationBundle:State')
-				->findOneBy( array( 'name' => $stateName, 'code' => $state->getCode(), 'country' => $country ));
-			}
-			
-			if( isset( $stateDB ) && $stateDB !== null ) // if state exists
-			{
-				// if UPDATE, we return State to its DB state
-				if( $this->om->contains($state) ) $this->om->refresh($state);
-				
-				$this->om->persist($stateDB);
-				$city->setState($stateDB);
-			}
-			else
-			{
-				if( $this->om->contains($state) ) // if new state & UPDATING member
-				{
-					$newState = clone $state;
-					$newState->setSlug(null);
-					$this->om->persist($newState);
-					$this->om->detach($state);
-					$state = $newState;
-				}
-				else $this->om->persist($state); // if new state & CREATING member
-				
-				$state->setCountry($country);
-				$city->setState($state);
-			}
-		}
-		else
-		{
-			// if UPDATE, return the State to its DB state
-			if( $this->om->contains($state) ) $this->om->refresh($state);
-			
-			$city->setState(null);
 		}
 		
 		$this->om->persist($city);
