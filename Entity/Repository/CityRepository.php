@@ -24,36 +24,15 @@ class CityRepository extends EntityRepository
 	 * @return City
 	 */
 	public function getOneByCityName( $cityName, $stateName, $countryName )
-	{
-		if( $stateName === null )
-		{
-			/*
-			 * The State name can be NULL
-			*/
-				
-			$query = $this->getEntityManager()
-			->createQuery( "SELECT c,s,y FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE c.name = :city AND s.name IS NULL AND y.name = :country");
-		
-			$query->setParameters(array(
-					'city'	=> $cityName,
-					'country' => $countryName
-			));
-		}
-		else
-		{
-			/*
-			 * With a specific State name
-			*/
-				
-			$query = $this->getEntityManager()
-			->createQuery( "SELECT c,s,y FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE c.name = :city AND s.name = :state AND y.name = :country");
-				
-			$query->setParameters(array(
-					'city' => $cityName,
-					'state' => $stateName,
-					'country' => $countryName
-			));
-		}
+	{	
+		$query = $this->getEntityManager()
+		->createQuery( "SELECT c,s,y FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE c.name = :city AND ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND y.name = :country");
+			
+		$query->setParameters(array(
+				'city' => $cityName,
+				'state' => $stateName,
+				'country' => $countryName
+		));
 		
 		return $query->getOneOrNullResult();
 	}

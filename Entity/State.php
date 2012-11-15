@@ -4,6 +4,7 @@
 
 namespace Jul\LocationBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,11 +26,13 @@ class State
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
+	 * @Assert\NotBlank(groups={"StateName","StateNameCode","StateFull"})
 	 */
 	private $name;
 	
 	/**
 	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @Assert\NotBlank(groups={"StateFull"})
 	 */
 	private $fullname;
 	
@@ -41,6 +44,7 @@ class State
 	
 	/**
 	 * @ORM\Column(length=2, nullable=true)
+	 * @Assert\NotBlank(groups={"StateNameCode","StateFull"})
 	 */
 	private $code;
 	
@@ -51,11 +55,13 @@ class State
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"StateFull"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"StateFull"})
 	 */
 	private $longitude;
 	

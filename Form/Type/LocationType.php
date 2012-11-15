@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LocationBundle\Form\DataTransformer\LocationToObjectTransformer;
+use Jul\LocationBundle\Form\DataTransformer\LocationTransformer;
 
 class LocationType extends AbstractType
 {
@@ -29,23 +29,26 @@ class LocationType extends AbstractType
 	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om, $locationOptions)
+	public function __construct(ObjectManager $om, $configOptions)
 	{
 		$this->om = $om;
-		$this->locationOptions = $locationOptions;
+		$this->configOptions = $configOptions;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$transformer = new LocationToObjectTransformer($this->om);
+		$transformer = new LocationTransformer($this->om);
 		
-		$arrayFields = array( 'name', 'fullname', 'address', 'latitude', 'longitude' );
+		$arrayFields = array( 'name', 'fullname', 'address', 'postcode', 'latitude', 'longitude' );
 		
 		foreach( $arrayFields as $field )
 		{
-			$builder->add( $field, $this->locationOptions[$field]['type'], $this->locationOptions[$field]['options'] );
+			if( $this->configOptions[$field]['active'] )
+			{
+				$builder->add( $field, $this->configOptions[$field]['type'], $this->configOptions[$field]['options'] );
+			}
 		}
-		
+				
 		$builder
 			->add( 'city', 'JulCityField' )
 			->addModelTransformer($transformer);
@@ -56,6 +59,7 @@ class LocationType extends AbstractType
 	{
 		$resolver->setDefaults(array(
 			'data_class' => 'Jul\LocationBundle\Entity\Location',
+			'validation_groups' => ($this->configOptions['validation']) ? array( 'Default', $this->configOptions['validation'] ) : array( 'Default' ),
 			'cascade_validation' => true
 		));
 	}

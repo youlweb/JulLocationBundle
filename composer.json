@@ -1,8 +1,8 @@
 {
     "name": "jul/location-bundle",
     "type": "symfony-bundle",
-    "description": "Provides a location management system to use in conjonction with a map API",
-    "keywords": ["location", "city", "state", "country"],
+    "description": "Provides a location management system to use independently or with a map API",
+    "keywords": ["Symfony", "Symfony2", "places", "autocomplete", "map", "api", "location", "city", "state", "country"],
     "homepage": "http://github.com/youlweb/JulLocationBundle",
     "license": "MIT",
     "authors": [

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\LocationRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "postcode"})})
  * 
  * @author julien
  *
@@ -25,13 +25,14 @@ class Location
 	private $id;
 	
 	/**
-	 * @ORM\Column(length=128)
-	 * @Assert\NotBlank
+	 * @ORM\Column(length=128, nullable=true)
+	 * @Assert\NotBlank(groups={"LocationName","LocationNameCode","LocationNoCode","LocationFull"})
 	 */
 	private $name;
 	
 	/**
 	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
 	 */
 	private $fullname;
 	
@@ -48,25 +49,31 @@ class Location
 	private $address;
 	
 	/**
+	 * @ORM\Column(length=10, nullable=true)
+	 * @Assert\NotBlank(groups={"LocationNameCode","LocationCode","LocationFull"})
+	 */
+	private $postcode;
+	
+	/**
 	 * @ORM\ManyToOne(targetEntity="City")
 	 */
 	private $city;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
 	 */
 	private $longitude;
 	
 	
 	// ------------------------------------------------------
 	
-
-    
 
     /**
      * Get id
@@ -168,6 +175,29 @@ class Location
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set postcode
+     *
+     * @param string $postcode
+     * @return Location
+     */
+    public function setPostcode($postcode)
+    {
+        $this->postcode = $postcode;
+    
+        return $this;
+    }
+
+    /**
+     * Get postcode
+     *
+     * @return string 
+     */
+    public function getPostcode()
+    {
+        return $this->postcode;
     }
 
     /**

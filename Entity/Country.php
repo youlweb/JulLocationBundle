@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
  * @author julien
  *
@@ -38,23 +38,24 @@ class Country
 	
 	/**
 	 * @ORM\Column(length=2, nullable=true, unique=true)
+	 * @Assert\NotBlank(groups={"CountryCode", "CountryFull"})
 	 */
 	private $code;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"CountryFull"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"CountryFull"})
 	 */
 	private $longitude;
 	
 	
 	// -------------------------------------------
-	
-    
 	
 
     /**

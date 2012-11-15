@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\CityRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "postcode"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
  * @author julien
  *
@@ -32,6 +32,7 @@ class City
 	
 	/**
 	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @Assert\NotBlank(groups={"CityFull"})
 	 */
 	private $fullname;
 	
@@ -42,30 +43,25 @@ class City
 	private $slug;
 	
 	/**
-	 * @ORM\Column(type="integer")
-	 * @Assert\NotBlank
-	 */
-	private $postcode;
-	
-	/**
 	 * @ORM\ManyToOne(targetEntity="State")
 	 */
 	private $state;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"CityFull"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Assert\NotBlank(groups={"CityFull"})
 	 */
 	private $longitude;
 	
 	
 	// ------------------------------------------------------
 	
-    
 
     /**
      * Get id
@@ -144,29 +140,6 @@ class City
     public function getSlug()
     {
         return $this->slug;
-    }
-
-    /**
-     * Set postcode
-     *
-     * @param integer $postcode
-     * @return City
-     */
-    public function setPostcode($postcode)
-    {
-        $this->postcode = $postcode;
-    
-        return $this;
-    }
-
-    /**
-     * Get postcode
-     *
-     * @return integer 
-     */
-    public function getPostcode()
-    {
-        return $this->postcode;
     }
 
     /**
