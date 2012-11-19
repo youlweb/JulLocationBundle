@@ -37,10 +37,10 @@ class Country
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=2, nullable=true, unique=true)
+	 * @ORM\Column(length=128, nullable=true, unique=true)
 	 * @Assert\NotBlank(groups={"CountryCode", "CountryFull"})
 	 */
-	private $code;
+	private $shortname;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
@@ -92,29 +92,6 @@ class Country
     }
 
     /**
-     * Set fullname
-     *
-     * @param string $fullname
-     * @return Country
-     */
-    public function setFullname($fullname)
-    {
-        $this->fullname = $fullname;
-    
-        return $this;
-    }
-
-    /**
-     * Get fullname
-     *
-     * @return string 
-     */
-    public function getFullname()
-    {
-        return $this->fullname;
-    }
-
-    /**
      * Set slug
      *
      * @param string $slug
@@ -138,26 +115,26 @@ class Country
     }
 
     /**
-     * Set code
+     * Set shortname
      *
-     * @param string $code
+     * @param string $shortname
      * @return Country
      */
-    public function setCode($code)
+    public function setShortname($shortname)
     {
-        $this->code = $code;
+        $this->shortname = $shortname;
     
         return $this;
     }
 
     /**
-     * Get code
+     * Get shortname
      *
      * @return string 
      */
-    public function getCode()
+    public function getShortname()
     {
-        return $this->code;
+        return $this->shortname;
     }
 
     /**

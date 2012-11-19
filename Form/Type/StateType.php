@@ -39,7 +39,7 @@ class StateType extends AbstractType
 	{
 		$transformer = new StateTransformer($this->om);
 		
-		$arrayFields = array( 'name', 'fullname', 'code', 'latitude', 'longitude' );
+		$arrayFields = array( 'name', 'fullname', 'shortname', 'latitude', 'longitude' );
 		
 		foreach( $arrayFields as $field )
 		{

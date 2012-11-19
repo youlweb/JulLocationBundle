@@ -39,7 +39,7 @@ class CountryType extends AbstractType
 	{
 		$transformer = new CountryTransformer($this->om);
 		
-		$arrayFields = array( 'name', 'code', 'latitude', 'longitude' );
+		$arrayFields = array( 'name', 'shortname', 'latitude', 'longitude' );
 		
 		foreach( $arrayFields as $field )
 		{

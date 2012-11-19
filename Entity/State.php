@@ -43,10 +43,10 @@ class State
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=2, nullable=true)
+	 * @ORM\Column(length=128, nullable=true)
 	 * @Assert\NotBlank(groups={"StateNameCode","StateFull"})
 	 */
-	private $code;
+	private $shortname;
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="Country")
@@ -149,26 +149,26 @@ class State
     }
 
     /**
-     * Set code
+     * Set shortname
      *
-     * @param string $code
+     * @param string $shortname
      * @return State
      */
-    public function setCode($code)
+    public function setShortname($shortname)
     {
-        $this->code = $code;
+        $this->shortname = $shortname;
     
         return $this;
     }
 
     /**
-     * Get code
+     * Get shortname
      *
      * @return string 
      */
-    public function getCode()
+    public function getShortname()
     {
-        return $this->code;
+        return $this->shortname;
     }
 
     /**
