@@ -102,7 +102,7 @@ zoom: {{ zoom|default('3') }},
 	{% endfor %}
 {% endfor %}
 
-{% if locationForm.city is defined %}
+{% if locationForm.location is defined %}
         infowindow.setContent('<div>' + place.name + '<br />' + place.formatted_address + '</div>');
 {% else %}
 		infowindow.setContent('<div>' + place.formatted_address + '</div>');
