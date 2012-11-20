@@ -10,8 +10,20 @@ function GmapInit(){
 	var mapOptions = {
 		styles: styleArray,
 		mapTypeId: {{ mapTypeId|default('google.maps.MapTypeId.ROADMAP')|raw }},
-		center: {{ mapCenter|default('new google.maps.LatLng(40.4230,-98.7372)')|raw }},
-		zoom: {{ zoom|default('3') }},
+		center:
+
+{% for locationType in locationTypes if attribute( locationForm, locationType ) is defined %}
+{% set locationTemp = attribute( locationForm, locationType ) %}
+{% if locationTemp.latitude is defined and locationTemp.latitude.vars.value > 0 %}
+new google.maps.LatLng({{ locationTemp.latitude.vars.value }},{{ locationTemp.longitude.vars.value }}),
+zoom: 17,
+{% else %}
+{{ mapCenter|default('new google.maps.LatLng(40.4230,-98.7372)')|raw }},
+zoom: {{ zoom|default('3') }},
+{% endif %}
+{% endfor %}
+		
+		
 		{{ mapOptions|default()|raw }}
 	};
 
