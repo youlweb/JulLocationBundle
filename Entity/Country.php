@@ -31,7 +31,7 @@ class Country
 	private $name;
 	
 	/**
-	 * @Gedmo\Slug(fields={"name", "code"}, style="camel")
+	 * @Gedmo\Slug(fields={"name"}, style="camel")
 	 * @ORM\Column(length=128, nullable=true)
 	 */
 	private $slug;
