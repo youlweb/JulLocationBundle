@@ -32,7 +32,7 @@ class Location
 	
 	/**
 	 * @ORM\Column(length=255, unique=true, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationFullnameCode","LocationNoCode","LocationFull"})
 	 */
 	private $fullname;
 	
@@ -50,7 +50,7 @@ class Location
 	
 	/**
 	 * @ORM\Column(length=10, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationNameCode","LocationCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationNameCode","LocationFullnameCode","LocationCode","LocationFull"})
 	 */
 	private $postcode;
 	
