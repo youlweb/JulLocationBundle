@@ -22,17 +22,19 @@ zoom: 17,
 zoom: {{ zoom|default('3') }},
 {% endif %}
 {% endfor %}
-		
-		
+
 		{{ mapOptions|default()|raw }}
 	};
 
 	var acOptions = {
-		{% if acOptions is defined %}{{ acOptions|raw }}{% else %}
-		{% if attribute( locationForm, 'location' ) is defined %}types: ['establishment']{% endif %}
-		{% if attribute( locationForm, 'city' ) is defined %}types: ['(cities)']{% endif %}
-		{% if attribute( locationForm, 'state' ) is defined or attribute( locationForm, 'country' ) is defined %}types: ['(regions)']{% endif %}
-		{% endif %}
+
+		types: {% if placeType is defined %}{{ placeType|raw }}{% else %}
+{% if attribute( locationForm, 'location' ) is defined %}['establishment'],{% endif %}
+{% if attribute( locationForm, 'city' ) is defined %}['(cities)'],{% endif %}
+{% if attribute( locationForm, 'state' ) is defined or attribute( locationForm, 'country' ) is defined %}['(regions)'],{% endif %}
+{% endif %}
+
+		{{ acOptions|default()|raw }}
 	};
 	
 	var map = new google.maps.Map(document.getElementById( '{{ mapDiv|default('map_canvas') }}'), mapOptions);
