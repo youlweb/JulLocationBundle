@@ -44,6 +44,7 @@ class City
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="State")
+	 * @ORM\JoinColumn(onDelete="set null")
 	 */
 	private $state;
 	

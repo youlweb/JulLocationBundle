@@ -50,6 +50,7 @@ class State
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="Country")
+	 * @ORM\JoinColumn(onDelete="set null")
 	 */
 	private $country;
 	

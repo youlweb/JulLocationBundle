@@ -62,6 +62,7 @@ class Location
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="City")
+	 * @ORM\JoinColumn(onDelete="set null")
 	 */
 	private $city;
 	
