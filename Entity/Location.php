@@ -31,22 +31,28 @@ class Location
 	private $name;
 	
 	/**
-	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @ORM\Column(unique=true, nullable=true)
 	 * @Assert\NotBlank(groups={"LocationFullnameCode","LocationNoCode","LocationFull"})
 	 */
 	private $fullname;
 	
 	/**
 	 * @Gedmo\Slug(fields={"fullname"}, style="camel")
-	 * @ORM\Column(length=255, nullable=true)
+	 * @ORM\Column(nullable=true)
 	 */
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=255)
-	 * @Assert\NotBlank
+	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"LocationFull"})
 	 */
 	private $address;
+	
+	/**
+	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"LocationAddress", "LocationFull"})
+	 */
+	private $fulladdress;
 	
 	/**
 	 * @ORM\Column(length=10, nullable=true)
@@ -70,6 +76,21 @@ class Location
 	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
 	 */
 	private $longitude;
+	
+	/**
+	 * @ORM\Column(nullable=true)
+	 */
+	private $imagePath;
+	
+	/**
+	 * @ORM\Column(nullable=true)
+	 */
+	private $website;
+	
+	/**
+	 * @ORM\Column(length=64, nullable=true)
+	 */
+	private $phone;
 	
 	
 	// ------------------------------------------------------
@@ -267,5 +288,97 @@ class Location
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set fulladdress
+     *
+     * @param string $fulladdress
+     * @return Location
+     */
+    public function setFulladdress($fulladdress)
+    {
+        $this->fulladdress = $fulladdress;
+    
+        return $this;
+    }
+
+    /**
+     * Get fulladdress
+     *
+     * @return string 
+     */
+    public function getFulladdress()
+    {
+        return $this->fulladdress;
+    }
+
+    /**
+     * Set imagePath
+     *
+     * @param string $imagePath
+     * @return Location
+     */
+    public function setImagePath($imagePath)
+    {
+        $this->imagePath = $imagePath;
+    
+        return $this;
+    }
+
+    /**
+     * Get imagePath
+     *
+     * @return string 
+     */
+    public function getImagePath()
+    {
+        return $this->imagePath;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     * @return Location
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return Location
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 }

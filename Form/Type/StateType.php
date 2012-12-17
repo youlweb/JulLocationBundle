@@ -39,13 +39,11 @@ class StateType extends AbstractType
 	{
 		$transformer = new StateTransformer($this->om);
 		
-		$arrayFields = array( 'name', 'fullname', 'shortname', 'latitude', 'longitude' );
-		
-		foreach( $arrayFields as $field )
+		foreach( $this->configOptions as $field => $arrayField )
 		{
-			if( $this->configOptions[$field]['active'] )
+			if( $arrayField['active'] )
 			{
-				$builder->add( $field, $this->configOptions[$field]['type'], $this->configOptions[$field]['options'] );
+				$builder->add( $field, $arrayField['type'], $arrayField['options'] );
 			}
 		}
 		

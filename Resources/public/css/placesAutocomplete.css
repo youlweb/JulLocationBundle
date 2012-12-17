@@ -1,0 +1,47 @@
+/*
+Jul places Autocomplete photo selector default styling
+*/
+
+.JulLocationPhotoSelectorText
+{
+	background: #EEE;
+	font-weight: bold;
+	padding: 4px;
+}
+
+#JulLocationPhotoSelector > ul
+{
+	overflow: hidden;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	margin-top: 10px;
+}
+
+#JulLocationPhotoSelector > ul > li
+{
+	float: left;
+}
+
+#JulLocationPhotoSelector > ul > li:nth-child(5n)
+{
+	float: none;
+}
+
+#JulLocationPhotoSelected
+{
+	max-width: 100px;
+}
+
+.JulLocationPhotoImg
+{
+	max-width: 60px;
+	border: 4px solid white;
+	margin-right: 5px;
+	vertical-align: text-top;
+}
+
+.JulLocationPhotoImgSelected
+{
+	border: 4px solid blue;
+}

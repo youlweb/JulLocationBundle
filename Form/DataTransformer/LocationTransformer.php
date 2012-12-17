@@ -50,10 +50,6 @@ class LocationTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($location)
 	{
-		/*
-		 * Mandatory field
-		 */
-		if( ( $locationAddress = $location->getAddress() ) === null ) return $location;
 		
 		/**
 		 * ------------------------
@@ -61,29 +57,29 @@ class LocationTransformer implements DataTransformerInterface
 		 */
 		
 		$locationDB = $this	->om
-							->getRepository('JulLocationBundle:Location')
-							->getOneByLocationName( $location->getName(), $locationAddress, $location->getPostcode(), $location->getCity()->getName(), $location->getCity()->getState()->getName(), $location->getCity()->getState()->getCountry()->getName() );
+							->getRepository( 'JulLocationBundle:Location' )
+							->getOneByLocationName( $location->getName(), $location->getAddress(), $location->getPostcode(), $location->getCity()->getName(), $location->getCity()->getState()->getName(), $location->getCity()->getState()->getCountry()->getName() );
 		
 		if( $locationDB )
 		{
 			// if found in DB
 			
-			if( $this->om->contains($location) )
+			if( $this->om->contains( $location ) )
 			{
 				// if entity is already managed ( update ) restore the DB entity to its original state
 		
-				$this->om->refresh($location);
+				$this->om->refresh( $location );
 			}
 		
 			return $locationDB;
 		}
-		elseif( $this->om->contains($location) )
+		elseif( $this->om->contains( $location ) )
 		{
 			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
 		
 			$newLocation = clone $location;
-			$newLocation->setSlug(null);	// to trigger Gedmo slug
-			$this->om->detach($location);
+			$newLocation->setSlug( null );	// to trigger Gedmo slug
+			$this->om->detach( $location );
 			$location = $newLocation;
 		}
 		

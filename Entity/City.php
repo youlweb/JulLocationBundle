@@ -25,20 +25,20 @@ class City
 	private $id;
 	
 	/**
-	 * @ORM\Column(length=128)
-	 * @Assert\NotBlank
+	 * @ORM\Column(length=128, nullable=true)
+	 * @Assert\NotBlank(groups={"CityName, CityFull"})
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @ORM\Column(unique=true, nullable=true)
 	 * @Assert\NotBlank(groups={"CityFull"})
 	 */
 	private $fullname;
 	
 	/**
 	 * @Gedmo\Slug(fields={"fullname"}, style="camel")
-	 * @ORM\Column(length=255, nullable=true)
+	 * @ORM\Column(nullable=true)
 	 */
 	private $slug;
 	

@@ -31,7 +31,7 @@ class State
 	private $name;
 	
 	/**
-	 * @ORM\Column(length=255, unique=true, nullable=true)
+	 * @ORM\Column(unique=true, nullable=true)
 	 * @Assert\NotBlank(groups={"StateFull"})
 	 */
 	private $fullname;

@@ -50,10 +50,6 @@ class CityTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($city)
 	{
-		/*
-		 * Mandatory field
-		 */
-		if( ( $cityName = $city->getName() ) === null ) return $city;
 		
 		/**
 		 * --------------------
@@ -62,7 +58,7 @@ class CityTransformer implements DataTransformerInterface
 		
 		$cityDB = $this	->om
 						->getRepository('JulLocationBundle:City')
-						->getOneByCityName( $cityName, $city->getState()->getName(), $city->getState()->getCountry()->getName() );
+						->getOneByCityName( $city->getName(), $city->getState()->getName(), $city->getState()->getCountry()->getName() );
 		
 		if( $cityDB )
 		{
