@@ -187,6 +187,6 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 		document.getElementById( 'JulLocationPhoto_' + elementId ).className = 'JulLocationPhotoImg JulLocationPhotoImgSelected';
 		
 		// Update imagePath field value
-		if( jsFieldIds.location.imagePath ) document.getElementById( jsFieldIds.location.imagePath ).value = imagePath;
+		if( ( componentField = document.getElementById( jsFieldIds.location.imagePath ) ) !== null ) componentField.value = imagePath;
 	}
 }
