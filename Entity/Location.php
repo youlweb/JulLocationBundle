@@ -1,7 +1,5 @@
 <?php 
 
-// Location entity
-
 namespace Jul\LocationBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,8 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * JulLocationBundle Location entity
+ * 
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\LocationRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "postcode"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "fullname", "postcode"})})
  * 
  * @author julien
  *
@@ -26,13 +26,13 @@ class Location
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationName","LocationNameAddress","LocationNameCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"locationname"})
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(unique=true, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFullname","LocationFullNameAddress","LocationFullnameCode","LocationFull"})
+	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"locationfullname"})
 	 */
 	private $fullname;
 	
@@ -44,19 +44,19 @@ class Location
 	
 	/**
 	 * @ORM\Column(nullable=true)
-	 * @Assert\NotBlank(groups={"LocationAddress","LocationNameAddress","LocationFullnameAddress","LocationFull"})
+	 * @Assert\NotBlank(groups={"locationaddress"})
 	 */
 	private $address;
 	
 	/**
 	 * @ORM\Column(nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFull"})
+	 * @Assert\NotBlank(groups={"locationfulladdress"})
 	 */
 	private $fulladdress;
 	
 	/**
 	 * @ORM\Column(length=10, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationNameCode","LocationFullnameCode","LocationCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"locationpostcode"})
 	 */
 	private $postcode;
 	
@@ -68,28 +68,31 @@ class Location
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFull"})
+	 * @Assert\NotBlank(groups={"locationlatitude"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFull"})
+	 * @Assert\NotBlank(groups={"locationlongitude"})
 	 */
 	private $longitude;
 	
 	/**
 	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"locationimagePath"})
 	 */
 	private $imagePath;
 	
 	/**
 	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"locationwebsite"})
 	 */
 	private $website;
 	
 	/**
 	 * @ORM\Column(length=64, nullable=true)
+	 * @Assert\NotBlank(groups={"phone"})
 	 */
 	private $phone;
 	

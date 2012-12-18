@@ -1,7 +1,5 @@
 <?php 
 
-// City entity
-
 namespace Jul\LocationBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,8 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * JulLocationBundle City entity
+ * 
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\CityRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "fullname"})})
  * 
  * @author julien
  *
@@ -26,13 +26,13 @@ class City
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
-	 * @Assert\NotBlank(groups={"CityName, CityFull"})
+	 * @Assert\NotBlank(groups={"cityname"})
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(unique=true, nullable=true)
-	 * @Assert\NotBlank(groups={"CityFull"})
+	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"cityfullname"})
 	 */
 	private $fullname;
 	
@@ -50,13 +50,13 @@ class City
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"CityFull"})
+	 * @Assert\NotBlank(groups={"citylatitude"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"CityFull"})
+	 * @Assert\NotBlank(groups={"citylongitude"})
 	 */
 	private $longitude;
 	

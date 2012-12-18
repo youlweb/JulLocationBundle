@@ -50,8 +50,6 @@ class CountryTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($country)
 	{
-		if( ( $countryName = $country->getName() ) === null ) return $country;
-		
 		/*
 		 * -----------------------
 		 * Check if Country exists
@@ -59,7 +57,7 @@ class CountryTransformer implements DataTransformerInterface
 		
 		$countryDB = $this	->om
 							->getRepository('JulLocationBundle:Country')
-							->findOneByName( $countryName );
+							->findOneByName( $country->getName() );
 		
 		if( $countryDB )
 		{

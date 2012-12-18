@@ -25,7 +25,7 @@ class StateRepository extends EntityRepository
 	public function getOneByStateName( $stateName, $countryName )
 	{	
 		$query = $this->getEntityManager()
-		->createQuery( "SELECT s FROM Jul\LocationBundle\Entity\State s JOIN s.country c WHERE ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND c.name = :country");
+		->createQuery( "SELECT s FROM Jul\LocationBundle\Entity\State s JOIN s.country c WHERE ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND ( c.name = :country OR ( c.name IS NULL AND :country IS NULL ) )");
 			
 		$query->setParameters(array(
 				'state' => $stateName,

@@ -1,7 +1,5 @@
 <?php 
 
-// Country entity
-
 namespace Jul\LocationBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,6 +7,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * JulLocationBundle Country entity
+ * 
  * @ORM\Entity
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
@@ -25,8 +25,8 @@ class Country
 	private $id;
 	
 	/**
-	 * @ORM\Column(length=128, unique=true)
-	 * @Assert\NotBlank
+	 * @ORM\Column(length=128, nullable=true)
+	 * @Assert\NotBlank(groups={"countryname"})
 	 */
 	private $name;
 	
@@ -37,20 +37,20 @@ class Country
 	private $slug;
 	
 	/**
-	 * @ORM\Column(length=128, nullable=true, unique=true)
-	 * @Assert\NotBlank(groups={"CountryCode", "CountryFull"})
+	 * @ORM\Column(length=128, nullable=true)
+	 * @Assert\NotBlank(groups={"countryshortname"})
 	 */
 	private $shortname;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"CountryFull"})
+	 * @Assert\NotBlank(groups={"countrylatitude"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"CountryFull"})
+	 * @Assert\NotBlank(groups={"countrylongitude"})
 	 */
 	private $longitude;
 	

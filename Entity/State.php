@@ -1,7 +1,5 @@
 <?php 
 
-// State entity
-
 namespace Jul\LocationBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,8 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * JulLocationBundle State entity
+ * 
  * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\StateRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "fullname"})})
  * 
  * @author julien
  *
@@ -26,13 +26,13 @@ class State
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
-	 * @Assert\NotBlank(groups={"StateName","StateNameCode","StateFull"})
+	 * @Assert\NotBlank(groups={"statename"})
 	 */
 	private $name;
 	
 	/**
-	 * @ORM\Column(unique=true, nullable=true)
-	 * @Assert\NotBlank(groups={"StateFull"})
+	 * @ORM\Column(nullable=true)
+	 * @Assert\NotBlank(groups={"statefullname"})
 	 */
 	private $fullname;
 	
@@ -44,7 +44,7 @@ class State
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
-	 * @Assert\NotBlank(groups={"StateNameCode","StateFull"})
+	 * @Assert\NotBlank(groups={"stateshortname"})
 	 */
 	private $shortname;
 	
@@ -56,13 +56,13 @@ class State
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"StateFull"})
+	 * @Assert\NotBlank(groups={"statelatitude"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"StateFull"})
+	 * @Assert\NotBlank(groups={"statelongitude"})
 	 */
 	private $longitude;
 	

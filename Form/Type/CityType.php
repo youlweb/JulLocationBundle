@@ -39,11 +39,14 @@ class CityType extends AbstractType
 	{
 		$transformer = new CityTransformer($this->om);
 		
-		foreach( $this->configOptions as $field => $arrayField )
+		/*
+		 * Generate form builder fields from config
+		*/
+		foreach( $this->configOptions as $field => $fieldArray )
 		{
-			if( $arrayField['active'] )
+			if( $fieldArray['active'] )
 			{
-				$builder->add( $field, $arrayField['type'], $arrayField['options'] );
+				$builder->add( $field, $fieldArray['type'], $fieldArray['options'] );
 			}
 		}
 		
@@ -55,9 +58,22 @@ class CityType extends AbstractType
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
+		/*
+		 * Generate Validation array from config
+		*/
+		$validationArray = array();
+		
+		foreach( $this->configOptions as $field => $fieldArray )
+		{
+			if( $fieldArray['active'] && $fieldArray['validation'] )
+			{
+				array_push( $validationArray, "city$field" );
+			}
+		}
+		
 		$resolver->setDefaults(array(
 			'data_class' => 'Jul\LocationBundle\Entity\City',
-			'validation_groups' => ($this->configOptions['validation']) ? array( 'Default', $this->configOptions['validation'] ) : array( 'Default' ),
+			'validation_groups' => $validationArray,
 			'cascade_validation' => true
 		));
 	}
