@@ -26,13 +26,13 @@ class Location
 	
 	/**
 	 * @ORM\Column(length=128, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationName","LocationNameCode","LocationNoCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationName","LocationNameAddress","LocationNameCode","LocationFull"})
 	 */
 	private $name;
 	
 	/**
 	 * @ORM\Column(unique=true, nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFullnameCode","LocationNoCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationFullname","LocationFullNameAddress","LocationFullnameCode","LocationFull"})
 	 */
 	private $fullname;
 	
@@ -44,13 +44,13 @@ class Location
 	
 	/**
 	 * @ORM\Column(nullable=true)
-	 * @Assert\NotBlank(groups={"LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationAddress","LocationNameAddress","LocationFullnameAddress","LocationFull"})
 	 */
 	private $address;
 	
 	/**
 	 * @ORM\Column(nullable=true)
-	 * @Assert\NotBlank(groups={"LocationAddress", "LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationFull"})
 	 */
 	private $fulladdress;
 	
@@ -68,13 +68,13 @@ class Location
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationFull"})
 	 */
 	private $latitude;
 	
 	/**
 	 * @ORM\Column(type="float", nullable=true)
-	 * @Assert\NotBlank(groups={"LocationNoCode","LocationFull"})
+	 * @Assert\NotBlank(groups={"LocationFull"})
 	 */
 	private $longitude;
 	
