@@ -23,3 +23,10 @@ services:
             arguments: ["@doctrine.orm.entity_manager", "%jul_location.countryOptions%"]
             tags:
                 - { name: form.type, alias: JulCountryField }
+                
+    gedmo.listener.sluggable:
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]

@@ -21,7 +21,7 @@ class CountryTransformer implements DataTransformerInterface
 	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct( ObjectManager $om )
 	{
 		$this->om = $om;
 	}
@@ -32,9 +32,9 @@ class CountryTransformer implements DataTransformerInterface
 	 * @param Country|null $country
 	 * @return Country
 	 */
-	public function transform($country)
+	public function transform( $country )
 	{
-		if(null === $country)
+		if( null === $country )
 		{
 			return null;
 		}
@@ -48,41 +48,46 @@ class CountryTransformer implements DataTransformerInterface
 	 * @param Country|null $country
 	 * @return Country
 	 */
-	public function reverseTransform($country)
+	public function reverseTransform( $country )
 	{
 		/*
-		 * -----------------------
-		 * Check if Country exists
+		 * Check if Country name exists
 		 */
-		
-		$countryDB = $this	->om
-							->getRepository('JulLocationBundle:Country')
-							->findOneByName( $country->getName() );
+		$countryDB = $this	-> om
+							-> getRepository( 'JulLocationBundle:Country' )
+							-> findOneByName( $country->getName() );
 		
 		if( $countryDB )
 		{
-			// if found in DB
+			// if name found in DB
 			
-			if( $this->om->contains($country) )
+			if( $this->om->contains( $country ) )
 			{
-				// if entity is already managed ( update ) restore the DB entity to its original state
-				
-				$this->om->refresh($country);
+				/*
+				 * if entity is managed ( update process ):
+				 * - restore the managed entity to its original state to preserve its data content
+				 * - return the DB entity
+				 */
+				$this->om->refresh( $country );
 			}
 					
 			return $countryDB;
 		}
-		elseif( $this->om->contains($country) )
+		elseif( $this->om->contains( $country ) )
 		{
-			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
-			
+			/*
+			 * if name is not found in DB, but entity is managed ( update process ):
+			 * - clone the entity
+			 * - free the original from management to preserve its data content
+			 * - persist the clone
+			 */
 			$newCountry = clone $country;
-			$newCountry->setSlug(null);	// to trigger Gedmo slug
-			$this->om->detach($country);
+			$newCountry->setSlug( null );	// to trigger Gedmo slug
+			$this->om->detach( $country );
 			$country = $newCountry;
 		}
 		
-		$this->om->persist($country);
+		$this->om->persist( $country );
 		
 		return $country;
 	}

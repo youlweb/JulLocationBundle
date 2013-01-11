@@ -21,7 +21,7 @@ class CityTransformer implements DataTransformerInterface
 	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct( ObjectManager $om )
 	{
 		$this->om = $om;
 	}
@@ -32,9 +32,9 @@ class CityTransformer implements DataTransformerInterface
 	 * @param City|null $city
 	 * @return City
 	 */
-	public function transform($city)
+	public function transform( $city )
 	{
-		if(null === $city)
+		if( null === $city )
 		{
 			return null;
 		}
@@ -48,42 +48,46 @@ class CityTransformer implements DataTransformerInterface
 	 * @param City|null $city
 	 * @return City
 	 */
-	public function reverseTransform($city)
+	public function reverseTransform( $city )
 	{
-		
-		/**
-		 * --------------------
-		 * Check if City exists
-		 */
-		
-		$cityDB = $this	->om
-						->getRepository('JulLocationBundle:City')
-						->getOneByCityName( $city->getName(), $city->getState()->getName(), $city->getState()->getCountry()->getName() );
+		/*
+		 * Check if City, State, Country names exist
+		*/
+		$cityDB = $this	-> om
+						-> getRepository( 'JulLocationBundle:City' )
+						-> getOneByCityName( $city->getName(), $city->getState()->getName(), $city->getState()->getCountry()->getName() );
 		
 		if( $cityDB )
 		{
-			// if found in DB
+			// if names found in DB
 				
-			if( $this->om->contains($city) )
+			if( $this->om->contains( $city ) )
 			{
-				// if entity is already managed ( update ) restore the DB entity to its original state
-		
-				$this->om->refresh($city);
+				/*
+				 * if entity is managed ( update process ):
+				 * - restore the managed entity to its original state to preserve its data content
+				 * - return the DB entity
+				 */
+				$this->om->refresh( $city );
 			}
 		
 			return $cityDB;
 		}
-		elseif( $this->om->contains($city) )
+		elseif( $this->om->contains( $city ) )
 		{
-			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
-		
+			/*
+			 * if name is not found in DB, but entity is managed ( update process ):
+			 * - clone the entity
+			 * - free the original from management to preserve its data content
+			 * - persist the clone
+			 */
 			$newCity = clone $city;
-			$newCity->setSlug(null);	// to trigger Gedmo slug
-			$this->om->detach($city);
+			$newCity->setSlug( null );	// to trigger Gedmo slug
+			$this->om->detach( $city );
 			$city = $newCity;
 		}
 		
-		$this->om->persist($city);
+		$this->om->persist( $city );
 		
 		return $city;
 	}

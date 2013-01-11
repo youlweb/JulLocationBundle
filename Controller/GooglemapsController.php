@@ -100,7 +100,7 @@ class GooglemapsController extends Controller
 		/*
 		 * Address autocomplete fallback
 		 */
-		if( $acFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) )
+		if( $acFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) && $topLevelForm->offsetExists( 'fulladdress' ) )
 		{
 			$acFields[ 1 ][ 'acInput' ] = ( $topLevelForm->offsetExists( 'fullname' ) ) ? $topLevelForm->getChild( 'fulladdress' )->get( 'id' ) : $topLevelForm->getChild( 'address' )->get( 'id' );
 			$acFields[ 1 ][ 'acOptions' ][ 'types' ] = array( 'geocode' );

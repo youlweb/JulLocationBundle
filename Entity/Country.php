@@ -57,6 +57,16 @@ class Country
 	
 	// -------------------------------------------
 	
+	
+	/**
+	 * Return string value
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return "cac";
+	}
 
     /**
      * Get id

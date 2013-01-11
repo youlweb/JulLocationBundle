@@ -21,7 +21,7 @@ class StateTransformer implements DataTransformerInterface
 	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct( ObjectManager $om )
 	{
 		$this->om = $om;
 	}
@@ -32,7 +32,7 @@ class StateTransformer implements DataTransformerInterface
 	 * @param State|null $state
 	 * @return State
 	 */
-	public function transform($state)
+	public function transform( $state )
 	{
 		if(null === $state)
 		{
@@ -48,41 +48,46 @@ class StateTransformer implements DataTransformerInterface
 	 * @param State|null $state
 	 * @return State
 	 */
-	public function reverseTransform($state)
+	public function reverseTransform( $state )
 	{
 		/*
-		 * ---------------------
-		 * Check if State exists
+		 * Check if State, Country names exist
 		 */
-		
-		$stateDB = $this	->om
-							->getRepository('JulLocationBundle:State')
-							->getOneByStateName( $state->getName(), $state->getCountry()->getName() );
+		$stateDB = $this	-> om
+							-> getRepository( 'JulLocationBundle:State' )
+							-> getOneByStateName( $state->getName(), $state->getCountry()->getName() );
 		
 		if( $stateDB )
 		{
-			// if found in DB
+			// if names found in DB
 			
-			if( $this->om->contains($state) )
+			if( $this->om->contains( $state ) )
 			{
-				// if entity is already managed ( update ) restore the DB entity to its original state
-		
-				$this->om->refresh($state);
+				/*
+				 * if entity is managed ( update process ):
+				 * - restore the managed entity to its original state to preserve its data content
+				 * - return the DB entity
+				 */
+				$this->om->refresh( $state );
 			}
 				
 			return $stateDB;
 		}
-		elseif( $this->om->contains($state) )
+		elseif( $this->om->contains( $state ) )
 		{
-			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
-				
+			/*
+			 * if name is not found in DB, but entity is managed ( update process ):
+			 * - clone the entity
+			 * - free the original from management to preserve its data content
+			 * - persist the clone
+			 */	
 			$newState = clone $state;
-			$newState->setSlug(null);	// to trigger Gedmo slug
-			$this->om->detach($state);
+			$newState->setSlug( null );	// to trigger Gedmo slug
+			$this->om->detach( $state );
 			$state = $newState;
 		}
 		
-		$this->om->persist($state);
+		$this->om->persist( $state );
 		
 		return $state;
 	}

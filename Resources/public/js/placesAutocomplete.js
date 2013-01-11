@@ -1,29 +1,34 @@
 /*
- * Jul's Google map adapter script
+ * Jul's Google map autocomplete interface script
  */
 function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitude, longitude, photoSelectorText, photoSelectedText, jsFieldIds ){
 	
 	/*
-	 * Create map
+	 * Create map if map DIV exists
 	 */
-	
-	// Add default center if needed
-	mapOptions.center = new google.maps.LatLng( latitude, longitude );
-	
-	// Add default map type if needed
-	if( mapOptions.mapTypeId == null ) mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
-	
-	var mapDivElement = document.getElementById(mapDiv);
-	var map = new google.maps.Map(mapDivElement, mapOptions);
-	
-	var infowindow = new google.maps.InfoWindow();
-	var marker = new google.maps.Marker({map: map});
-	
-	// If latitude/longitude is set in form, place marker
-	if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.latitude' ) ) ) !== null && componentField.value != 0 )
+	if( ( mapDivElement = document.getElementById( mapDiv ) ) !== null )
 	{
-		marker.setVisible(true);
-		marker.setPosition(mapOptions.center);
+		// Add default center if needed
+		mapOptions.center = new google.maps.LatLng( latitude, longitude );
+		
+		// Add default map type if needed
+		if( mapOptions.mapTypeId == null ) mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
+		
+		var map = new google.maps.Map(mapDivElement, mapOptions);
+		
+		var infowindow = new google.maps.InfoWindow();
+		var marker = new google.maps.Marker({map: map});
+		
+		// If latitude/longitude is set in form, place marker
+		if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.latitude' ) ) ) !== null && componentField.value != 0 )
+		{
+			marker.setVisible(true);
+			marker.setPosition(mapOptions.center);
+		}
+	}
+	else
+	{
+		var map = false;
 	}
 	
 	/*
@@ -47,27 +52,32 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 		 */
 		google.maps.event.addListener( autoComplete[ acCount ], 'place_changed', function() {
 			
-			infowindow.close();
-			marker.setVisible(false);
-			
 			var place = this.getPlace();
-			if (!place.geometry) return;
 			
 			/*
 			 * Outputs the place results in the javascript console
 			 */
 			console.log(place);
 			
-			// If the place has a geometry, then present it on a map
-			
-			if (place.geometry.viewport) {
-				map.fitBounds(place.geometry.viewport);
-			} else {
-				map.setCenter(place.geometry.location);
-				map.setZoom(zoomResolved);
+			/*
+			 * If there's a map, show marker
+			 */
+			if( map && place.geometry )
+			{
+				infowindow.close();
+				marker.setVisible(false);
+				
+				// If the place has a geometry, then present it on a map
+				
+				if (place.geometry.viewport) {
+					map.fitBounds(place.geometry.viewport);
+				} else {
+					map.setCenter(place.geometry.location);
+					map.setZoom(zoomResolved);
+				}
+				marker.setPosition(place.geometry.location);
+				marker.setVisible(true);
 			}
-			marker.setPosition(place.geometry.location);
-			marker.setVisible(true);
 			
 			// Reset fields
 			

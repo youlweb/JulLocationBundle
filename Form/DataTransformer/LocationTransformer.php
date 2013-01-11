@@ -21,7 +21,7 @@ class LocationTransformer implements DataTransformerInterface
 	/**
 	 * @param ObjectManager $om
 	 */
-	public function __construct(ObjectManager $om)
+	public function __construct( ObjectManager $om )
 	{
 		$this->om = $om;
 	}
@@ -32,9 +32,9 @@ class LocationTransformer implements DataTransformerInterface
 	 * @param Location|null $location
 	 * @return Location
 	 */
-	public function transform($location)
+	public function transform( $location )
 	{
-		if(null === $location)
+		if( null === $location )
 		{
 			return null;
 		}
@@ -48,26 +48,26 @@ class LocationTransformer implements DataTransformerInterface
 	 * @param Location|null $location
 	 * @return Location
 	 */
-	public function reverseTransform($location)
+	public function reverseTransform(  $location)
 	{
-		
-		/**
-		 * ------------------------
-		 * Check if Location exists
-		 */
-		
-		$locationDB = $this	->om
-							->getRepository( 'JulLocationBundle:Location' )
-							->getOneByLocationName( $location->getName(), $location->getAddress(), $location->getPostcode(), $location->getCity()->getName(), $location->getCity()->getState()->getName(), $location->getCity()->getState()->getCountry()->getName() );
+		/*
+		 * Check if Location, City, State, Country names exist
+		*/
+		$locationDB = $this	-> om
+							-> getRepository( 'JulLocationBundle:Location' )
+							-> getOneByLocationName( $location->getName(), $location->getAddress(), $location->getPostcode(), $location->getCity()->getName(), $location->getCity()->getState()->getName(), $location->getCity()->getState()->getCountry()->getName() );
 		
 		if( $locationDB )
 		{
-			// if found in DB
+			// if names found in DB
 			
 			if( $this->om->contains( $location ) )
 			{
-				// if entity is already managed ( update ) restore the DB entity to its original state
-		
+				/*
+				 * if entity is managed ( update process ):
+				 * - restore the managed entity to its original state to preserve its data content
+				 * - return the DB entity
+				 */
 				$this->om->refresh( $location );
 			}
 		
@@ -75,15 +75,19 @@ class LocationTransformer implements DataTransformerInterface
 		}
 		elseif( $this->om->contains( $location ) )
 		{
-			// if not in DB, and entity is managed ( update ), we clone the entity, free it from its DB slot, and persist the clone
-		
+			/*
+			 * if name is not found in DB, but entity is managed ( update process ):
+			 * - clone the entity
+			 * - free the original from management to preserve its data content
+			 * - persist the clone
+			 */
 			$newLocation = clone $location;
 			$newLocation->setSlug( null );	// to trigger Gedmo slug
 			$this->om->detach( $location );
 			$location = $newLocation;
 		}
 		
-		$this->om->persist($location);
+		$this->om->persist( $location );
 		
 		return $location;
 	}
