@@ -12,31 +12,81 @@ use Doctrine\ORM\EntityRepository;
 class LocationRepository extends EntityRepository
 {
 	/**
-	 * Find a Location using a Location address&postcode, City name, State name, and a Country name
+	 * Find a Location
 	 *
-	 * @param string $locationName
-	 * @param string $locationAddress
-	 * @param string $locationPostcode
-	 * @param string $cityName
-	 * @param string $stateName
-	 * @param string $countryName
+	 * @param \Jul\LocationBundle\Entity\Location
 	 *
 	 * @return Location
 	 */
-	public function getOneByLocationName( $locationName = NULL, $locationAddress = NULL, $locationPostcode = NULL, $cityName = NULL, $stateName = NULL, $countryName = NULL )
+	public function getOneByLocationObject( \Jul\LocationBundle\Entity\Location $location )
 	{
-		$query = $this->getEntityManager()
-		->createQuery( "SELECT l FROM Jul\LocationBundle\Entity\Location l JOIN l.city c JOIN c.state s JOIN s.country y WHERE ( l.name = :location OR ( l.name IS NULL AND :location IS NULL ) ) AND ( l.address = :address OR ( l.address IS NULL AND :address IS NULL ) ) AND ( l.postcode = :postcode OR ( l.postcode IS NULL AND :postcode IS NULL ) ) AND ( c.name = :city OR ( c.name IS NULL AND :city IS NULL ) ) AND ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND ( y.name = :country OR ( y.name IS NULL AND :country IS NULL ) )");
+		$query = $this	->createQueryBuilder( 'l' )
+						->leftJoin( 'l.city', 'c' )
+						->leftJoin( 'c.state', 's' )
+						->leftJoin( 's.country', 'y' )
+		;
 		
-		$query->setParameters(array(
-				'location' => $locationName,
-				'address' => $locationAddress,
-				'postcode' => $locationPostcode,
-				'city' => $cityName,
-				'state' => $stateName,
-				'country' => $countryName
-		));
-	
-		return $query->getOneOrNullResult();
+		/*
+		 * Location
+		 */
+		if( $location === null )
+		{
+			$query	->where( 'l IS NULL' );
+		}
+		else
+		{
+			$query	->where( 'l.name = :location OR ( l IS NOT NULL AND l.name IS NULL AND :location IS NULL )' )
+					->andWhere( 'l.address = :address OR ( l.address IS NULL AND :address IS NULL )' )
+					->andWhere( 'l.postcode = :postcode OR ( l.postcode IS NULL AND :postcode IS NULL )' )
+					->setParameter( 'location', $location->getName() )
+					->setParameter( 'address', $location->getAddress() )
+					->setParameter( 'postcode', $location->getPostcode() )
+					;
+			
+			/*
+			 * City
+			 */
+			if( ( $city = $location->getCity() ) === null )
+			{
+				$query	->andWhere( 'c is NULL' );
+			}
+			else
+			{
+				$query	->andWhere( 'c.name = :city OR ( c IS NOT NULL AND c.name IS NULL AND :city IS NULL )' )
+						->setParameter( 'city', $city->getName() )
+						;
+				
+				/*
+				 * State
+				 */
+				if( ( $state = $city->getState() ) === null )
+				{
+					$query	->andWhere( 's IS NULL' );
+				}
+				else
+				{		
+					$query	->andWhere( 's.name = :state OR ( s IS NOT NULL AND s.name IS NULL AND :state IS NULL )' )
+							->setParameter( 'state', $state->getName() )
+							;
+					
+					/*
+					 * Country
+					 */
+					if( ( $country = $state->getCountry() ) === null )
+					{
+						$query	->andWhere( 'y IS NULL' );
+						
+					}
+					else
+					{
+						$query	->andWhere( 'y.name = :country OR ( y IS NOT NULL AND y.name IS NULL AND :country IS NULL )' )
+								->setParameter( 'country', $country->getName() )
+								;
+					}
+				}
+			}
+		}
+		
+		return $query->getQuery()->getOneOrNullResult();
 	}
 }

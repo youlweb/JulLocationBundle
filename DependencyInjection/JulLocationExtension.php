@@ -17,20 +17,14 @@ class JulLocationExtension extends Extension
     /**
      * {@inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load( array $configs, ContainerBuilder $container )
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $options = $this->processConfiguration( $configuration, $configs );
         
-        //print_r( $config );
-        //exit;
+        $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__.'/../Resources/config' ) );
+        $loader->load( 'services.yml' );
         
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-        
-        $container->setParameter('jul_location.locationOptions', $config['inputFields']['location']);
-        $container->setParameter('jul_location.cityOptions', $config['inputFields']['city']);
-        $container->setParameter('jul_location.stateOptions', $config['inputFields']['state']);
-        $container->setParameter('jul_location.countryOptions', $config['inputFields']['country']);
+        $container->setParameter( 'jul_location.options', $options );
     }
 }

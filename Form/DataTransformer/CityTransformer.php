@@ -51,15 +51,15 @@ class CityTransformer implements DataTransformerInterface
 	public function reverseTransform( $city )
 	{
 		/*
-		 * Check if City, State, Country names exist
+		 * Check if City exists
 		*/
 		$cityDB = $this	-> om
 						-> getRepository( 'JulLocationBundle:City' )
-						-> getOneByCityName( $city->getName(), $city->getState()->getName(), $city->getState()->getCountry()->getName() );
+						-> getOneByCityObject( $city );
 		
 		if( $cityDB )
 		{
-			// if names found in DB
+			// if City found in DB
 				
 			if( $this->om->contains( $city ) )
 			{
@@ -76,7 +76,7 @@ class CityTransformer implements DataTransformerInterface
 		elseif( $this->om->contains( $city ) )
 		{
 			/*
-			 * if name is not found in DB, but entity is managed ( update process ):
+			 * if City is not found in DB, but entity is managed ( update process ):
 			 * - clone the entity
 			 * - free the original from management to preserve its data content
 			 * - persist the clone

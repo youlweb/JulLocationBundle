@@ -48,18 +48,18 @@ class LocationTransformer implements DataTransformerInterface
 	 * @param Location|null $location
 	 * @return Location
 	 */
-	public function reverseTransform(  $location)
+	public function reverseTransform( $location )
 	{
 		/*
-		 * Check if Location, City, State, Country names exist
+		 * Check if Location exists
 		*/
 		$locationDB = $this	-> om
 							-> getRepository( 'JulLocationBundle:Location' )
-							-> getOneByLocationName( $location->getName(), $location->getAddress(), $location->getPostcode(), $location->getCity()->getName(), $location->getCity()->getState()->getName(), $location->getCity()->getState()->getCountry()->getName() );
+							-> getOneByLocationObject( $location );
 		
 		if( $locationDB )
 		{
-			// if names found in DB
+			// if Location found in DB
 			
 			if( $this->om->contains( $location ) )
 			{
@@ -76,7 +76,7 @@ class LocationTransformer implements DataTransformerInterface
 		elseif( $this->om->contains( $location ) )
 		{
 			/*
-			 * if name is not found in DB, but entity is managed ( update process ):
+			 * if Location is not found in DB, but entity is managed ( update process ):
 			 * - clone the entity
 			 * - free the original from management to preserve its data content
 			 * - persist the clone

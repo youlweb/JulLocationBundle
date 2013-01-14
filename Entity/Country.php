@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * JulLocationBundle Country entity
  * 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Jul\LocationBundle\Entity\Repository\CountryRepository")
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name"})})
  * 
  * @author julien

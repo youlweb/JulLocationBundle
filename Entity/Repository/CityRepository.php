@@ -12,25 +12,62 @@ use Doctrine\ORM\EntityRepository;
 class CityRepository extends EntityRepository
 {
 	/**
-	 * Find a City using a City name, State name, and a Country name
+	 * Find a City
 	 * 
-	 * @param string $cityName
-	 * @param string $stateName
-	 * @param string $countryName
+	 * @param \Jul\LocationBundle\Entity\City
 	 * 
 	 * @return City
 	 */
-	public function getOneByCityName( $cityName = NULL, $stateName = NULL, $countryName = NULL )
+	public function getOneByCityObject( \Jul\LocationBundle\Entity\City $city )
 	{	
-		$query = $this->getEntityManager()
-		->createQuery( "SELECT c FROM Jul\LocationBundle\Entity\City c JOIN c.state s JOIN s.country y WHERE ( c.name = :city OR ( c.name IS NULL AND :city IS NULL ) ) AND ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND ( y.name = :country OR ( y.name IS NULL AND :country IS NULL ) )");
-			
-		$query->setParameters(array(
-				'city' => $cityName,
-				'state' => $stateName,
-				'country' => $countryName
-		));
+		$query = $this	->createQueryBuilder( 'c' )
+						->leftJoin( 'c.state', 's' )
+						->leftJoin( 's.country', 'y' )
+		;
 		
-		return $query->getOneOrNullResult();
+		/*
+		 * City
+		 */
+		if( $city === null )
+		{
+			$query	->where( 'c is NULL' );
+		}
+		else
+		{
+			$query	->where( 'c.name = :city OR ( c IS NOT NULL AND c.name IS NULL AND :city IS NULL )' )
+					->setParameter( 'city', $city->getName() )
+					;
+			
+			/*
+			 * State
+			 */
+			if( ( $state = $city->getState() ) === null )
+			{
+				$query	->andWhere( 's IS NULL' );
+			}
+			else
+			{
+				$query	->andWhere( 's.name = :state OR ( s IS NOT NULL AND s.name IS NULL AND :state IS NULL )' )
+						->setParameter( 'state', $state->getName() )
+						;
+				
+				/*
+				 * Country
+				 */
+				if( ( $country = $state->getCountry() ) === null )
+				{
+					$query	->andWhere( 'y IS NULL' );
+					
+				}
+				else
+				{
+					$query	->andWhere( 'y.name = :country OR ( y IS NOT NULL AND y.name IS NULL AND :country IS NULL )' )
+							->setParameter( 'country', $country->getName() )
+							;
+				}
+			}
+		}
+		
+		return $query->getQuery()->getOneOrNullResult();
 	}
 }

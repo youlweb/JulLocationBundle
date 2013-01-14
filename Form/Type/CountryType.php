@@ -1,6 +1,6 @@
 <?php 
 
-// Country field
+// JulCountryField
 
 namespace Jul\LocationBundle\Form\Type;
 
@@ -41,17 +41,15 @@ class CountryType extends AbstractType
 		/*
 		 * Generate form builder fields from config
 		*/
-		foreach( $this->configOptions as $field => $fieldArray )
+		foreach( $this->configOptions['country']['inputFields'] as $field => $fieldArray )
 		{
-			if( $fieldArray['active'] )
+			if( $fieldArray['enabled'] )
 			{
 				$builder->add( $field, $fieldArray['type'], $fieldArray['options'] );
 			}
 		}
 		
-		$builder
-		->addModelTransformer($transformer);
-		;
+		$builder->addModelTransformer($transformer);
 	}
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -61,16 +59,16 @@ class CountryType extends AbstractType
 		*/
 		$validationArray = array();
 		
-		foreach( $this->configOptions as $field => $fieldArray )
+		foreach( $this->configOptions['country']['inputFields'] as $field => $fieldArray )
 		{
-			if( $fieldArray['active'] && $fieldArray['validation'] )
+			if( $fieldArray['enabled'] && $fieldArray['required'] )
 			{
 				array_push( $validationArray, "country$field" );
 			}
 		}
 		
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LocationBundle\Entity\Country',
+			'data_class' => $this->configOptions['country']['data_class'],
 			'validation_groups' => $validationArray
 		));
 	}

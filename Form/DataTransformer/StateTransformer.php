@@ -51,15 +51,15 @@ class StateTransformer implements DataTransformerInterface
 	public function reverseTransform( $state )
 	{
 		/*
-		 * Check if State, Country names exist
+		 * Check if State exists
 		 */
 		$stateDB = $this	-> om
 							-> getRepository( 'JulLocationBundle:State' )
-							-> getOneByStateName( $state->getName(), $state->getCountry()->getName() );
+							-> getOneByStateObject( $state );
 		
 		if( $stateDB )
 		{
-			// if names found in DB
+			// if State found in DB
 			
 			if( $this->om->contains( $state ) )
 			{
@@ -76,7 +76,7 @@ class StateTransformer implements DataTransformerInterface
 		elseif( $this->om->contains( $state ) )
 		{
 			/*
-			 * if name is not found in DB, but entity is managed ( update process ):
+			 * if State is not found in DB, but entity is managed ( update process ):
 			 * - clone the entity
 			 * - free the original from management to preserve its data content
 			 * - persist the clone

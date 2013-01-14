@@ -12,23 +12,47 @@ use Doctrine\ORM\EntityRepository;
 class StateRepository extends EntityRepository
 {
 	/**
-	 * Find a State using a State name and a Country name
+	 * Find a State
 	 * 
-	 * @param string $stateName
-	 * @param string $countryName
+	 * @param \Jul\LocationBundle\Entity\State
 	 * 
 	 * @return State
 	 */
-	public function getOneByStateName( $stateName = NULL, $countryName = NULL )
+	public function getOneByStateObject( \Jul\LocationBundle\Entity\State $state )
 	{	
-		$query = $this->getEntityManager()
-		->createQuery( "SELECT s FROM Jul\LocationBundle\Entity\State s JOIN s.country c WHERE ( s.name = :state OR ( s.name IS NULL AND :state IS NULL ) ) AND ( c.name = :country OR ( c.name IS NULL AND :country IS NULL ) )");
-			
-		$query->setParameters(array(
-				'state' => $stateName,
-				'country' => $countryName
-		));
+		$query = $this	->createQueryBuilder( 's' )
+						->leftJoin( 's.country', 'y' )
+		;
 		
-		return $query->getOneOrNullResult();
+		/*
+		 * State
+		 */
+		if( $state === null )
+		{
+			$query	->where( 's IS NULL' );
+		}
+		else
+		{		
+			$query	->where( 's.name = :state OR ( s IS NOT NULL AND s.name IS NULL AND :state IS NULL )' )
+					->setParameter( 'state', $state->getName() )
+					;
+			
+			/*
+			 * Country
+			 */
+			if( ( $country = $state->getCountry() ) === null )
+			{
+				$query	->andWhere( 'y IS NULL' );
+				
+			}
+			else
+			{
+				$query	->andWhere( 'y.name = :country OR ( y IS NOT NULL AND y.name IS NULL AND :country IS NULL )' )
+						->setParameter( 'country', $country->getName() )
+						;
+			}
+		}
+		
+		return $query->getQuery()->getOneOrNullResult();
 	}
 }

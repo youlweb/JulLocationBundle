@@ -1,6 +1,6 @@
 <?php 
 
-// Location field
+// JulLocationField
 
 namespace Jul\LocationBundle\Form\Type;
 
@@ -41,18 +41,17 @@ class LocationType extends AbstractType
 		/*
 		 * Generate form builder fields from config
 		 */
-		foreach( $this->configOptions as $field => $fieldArray )
+		foreach( $this->configOptions['location']['inputFields'] as $field => $fieldArray )
 		{
-			if( $fieldArray['active'] )
+			if( $fieldArray['enabled'] )
 			{
 				$builder->add( $field, $fieldArray['type'], $fieldArray['options'] );
 			}
 		}
 		
-		$builder
-			->add( 'city', 'JulCityField' )
-			->addModelTransformer($transformer);
-		;
+		if( $this->configOptions['city']['enabled'] ) $builder->add( 'city', 'JulCityField' );
+		
+		$builder->addModelTransformer($transformer);
 	}
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -62,16 +61,16 @@ class LocationType extends AbstractType
 		 */
 		$validationArray = array();
 		
-		foreach( $this->configOptions as $field => $fieldArray )
+		foreach( $this->configOptions['location']['inputFields'] as $field => $fieldArray )
 		{
-			if( $fieldArray['active'] && $fieldArray['validation'] )
+			if( $fieldArray['enabled'] && $fieldArray['required'] )
 			{
 				array_push( $validationArray, "location$field" );
 			}
 		}
 		
 		$resolver->setDefaults(array(
-			'data_class' => 'Jul\LocationBundle\Entity\Location',
+			'data_class' => $this->configOptions['location']['data_class'],
 			'validation_groups' => $validationArray,
 			'cascade_validation' => true
 		));

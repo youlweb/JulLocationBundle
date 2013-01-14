@@ -109,16 +109,14 @@ class GooglemapsController extends Controller
 		/*
 		 * Build javascript field IDs array using JulLocationBundle config
 		 */
-		$allFields[ 'location' ] = $this->container->parameters[ 'jul_location.locationoptions' ];
-		$allFields[ 'city' ] = $this->container->parameters[ 'jul_location.cityoptions' ];
-		$allFields[ 'state' ] = $this->container->parameters[ 'jul_location.stateoptions' ];
-		$allFields[ 'country' ] = $this->container->parameters[ 'jul_location.countryoptions' ];
 		
 		$jsFieldIds = array();
 		$tmpLevel = $locationForm;
 		
-		foreach( $allFields as $level => $fields )
+		foreach( $this->container->parameters[ 'jul_location.options' ] as $level => $options )
 		{
+			$fields = $options['inputFields'];
+			
 			$tmpArray = array();
 			
 			if( $tmpLevel->offsetExists( $level ) )
@@ -130,7 +128,7 @@ class GooglemapsController extends Controller
 					/*
 					 * Check if field is active in config && exists in the form
 					 */
-					if( $fieldArray[ 'active' ] && $tmpLevel->offsetExists( $field ) ) $tmpArray[ $field ] = $tmpLevel->getChild( $field )->get( 'id' );
+					if( $fieldArray[ 'enabled' ] && $tmpLevel->offsetExists( $field ) ) $tmpArray[ $field ] = $tmpLevel->getChild( $field )->get( 'id' );
 				}
 			}
 			
