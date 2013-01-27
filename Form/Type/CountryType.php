@@ -1,15 +1,22 @@
 <?php 
 
-// JulCountryField
+/*
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ *
+ */
 
 namespace Jul\LocationBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LocationBundle\Form\DataTransformer\CountryTransformer;
+use Jul\LocationBundle\Form\DataTransformer\LocationTransformer;
 
 class CountryType extends AbstractType
 {
@@ -27,48 +34,49 @@ class CountryType extends AbstractType
 	
 	/**
 	 * @param ObjectManager $om
+	 * @param array $configOptions
 	 */
-	public function __construct(ObjectManager $om, $configOptions)
+	public function __construct( ObjectManager $om, $configOptions )
 	{
 		$this->om = $om;
 		$this->configOptions = $configOptions;
 	}
 	
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	public function buildForm( FormBuilderInterface $builder, array $options )
 	{
-		$transformer = new CountryTransformer($this->om);
-		
 		/*
 		 * Generate form builder fields from config
-		*/
-		foreach( $this->configOptions['country']['inputFields'] as $field => $fieldArray )
+		 */
+		foreach( $this->configOptions[ 'country' ][ 'fields' ] as $field => $fieldArray )
 		{
-			if( $fieldArray['enabled'] )
+			if( $fieldArray[ 'enabled' ] )
 			{
-				$builder->add( $field, $fieldArray['type'], $fieldArray['options'] );
+				$builder->add( $field, $fieldArray[ 'type' ], $fieldArray[ 'options' ] );
 			}
 		}
 		
-		$builder->addModelTransformer($transformer);
+		$transformer = new LocationTransformer( 'country', $this->om, $this->configOptions );
+		
+		$builder->addModelTransformer( $transformer );
 	}
 	
-	public function setDefaultOptions(OptionsResolverInterface $resolver)
+	public function setDefaultOptions( OptionsResolverInterface $resolver )
 	{
 		/*
 		 * Generate Validation array from config
 		*/
 		$validationArray = array();
 		
-		foreach( $this->configOptions['country']['inputFields'] as $field => $fieldArray )
+		foreach( $this->configOptions[ 'country' ][ 'fields' ] as $field => $fieldArray )
 		{
-			if( $fieldArray['enabled'] && $fieldArray['required'] )
+			if( $fieldArray[ 'enabled' ] && $fieldArray[ 'required' ] )
 			{
-				array_push( $validationArray, "country$field" );
+				array_push( $validationArray, "country_$field" );
 			}
 		}
 		
-		$resolver->setDefaults(array(
-			'data_class' => $this->configOptions['country']['data_class'],
+		$resolver->setDefaults( array(
+			'data_class' => $this->configOptions[ 'country' ][ 'data_class' ],
 			'validation_groups' => $validationArray
 		));
 	}

@@ -1,32 +1,42 @@
+#
+# JulLocationBundle Symfony package.
+#
+# © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+#
+# Full license information in the LICENSE text file distributed
+# with this source code.
+#
+
 services:
     
     form.type.JulLocationField:
-            class: Jul\LocationBundle\Form\Type\LocationType
-            arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
-            tags:
-                - { name: form.type, alias: JulLocationField }
+        class: Jul\LocationBundle\Form\Type\LocationType
+        arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
+        tags:
+            - { name: form.type, alias: JulLocationField }
     
     form.type.JulCityField:
-            class: Jul\LocationBundle\Form\Type\CityType
-            arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
-            tags:
-                - { name: form.type, alias: JulCityField }
+        class: Jul\LocationBundle\Form\Type\CityType
+        arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
+        tags:
+            - { name: form.type, alias: JulCityField }
     
     form.type.JulStateField:
-            class: Jul\LocationBundle\Form\Type\StateType
-            arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
-            tags:
-                - { name: form.type, alias: JulStateField }
+        class: Jul\LocationBundle\Form\Type\StateType
+        arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
+        tags:
+            - { name: form.type, alias: JulStateField }
                 
     form.type.JulCountryField:
-            class: Jul\LocationBundle\Form\Type\CountryType
-            arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
-            tags:
-                - { name: form.type, alias: JulCountryField }
-                
+        class: Jul\LocationBundle\Form\Type\CountryType
+        arguments: ["@doctrine.orm.entity_manager", "%jul_location.options%"]
+        tags:
+            - { name: form.type, alias: JulCountryField }
+    
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+    

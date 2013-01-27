@@ -1,8 +1,19 @@
+
+{#
+ # JulLocationBundle Symfony package.
+ #
+ # © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ #
+ # Full license information in the LICENSE text file distributed
+ # with this source code.
+ #}
+ 
 <script type="text/javascript" src="{{ asset('bundles/jullocation/js/placesAutocomplete.js') }}"></script>
 <script type="text/javascript">
 
-// Call to Jul's Google maps places autocomplete script
-
+/**
+ * Call places autocomplete
+ */
 function JulAutoComplete()
 {
 	GmapInit( '{{ mapDiv }}', {{ mapOptions|raw }}, {{ acFields|raw }}, '{{ topLevel }}', {{ zoomResolved }}, {{ latitude }}, {{ longitude }}, '{% trans %}photo.selector{% endtrans %}', '{% trans %}photo.selected{% endtrans %}', {{ jsFieldIds|raw }} );

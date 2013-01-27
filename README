@@ -1,12 +1,20 @@
-This bundle is still in development. You may try it in a dev environment, but tests have not been written for it yet.
+This bundle is in development. You may try it in a dev environment, but tests have not been written for it yet.
 
 You are using this bundle at your own risks!
 
-Full documentation and tests are expected early 02-2013
+Full documentation and tests are expected mid 02-2013
 
-The doc is INCOMPLETE and INACCURATE, it is a draft.
+JulLocationBundle provides 4 location entities configured to avoid duplicates:
 
-JulLocationBundle offers:
+1. `Location`
+2. `City`
+3. `State`
+4. `Country`
 
-- A set of location entities ( location, city, state, country ) with their forms, that are programmed to avoid duplicates.
-- A preconfigured Googlemaps places autocomplete interface to provide typing suggestions, map visualization, auto field completion, and even places photos to the aforementioned entities.
+You can use as little as the `Country` entity, or as much as the full precision
+`Location` entity, and everything in between.
+
+In addition, a Googlemap places autocomplete implementation can be activated 
+to feed the entities with properly formatted data, show the location on a map,
+and even offer photos of the locations when available.
+

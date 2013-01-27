@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ * 
+ */
+
 namespace Jul\LocationBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -7,11 +17,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-/**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class JulLocationExtension extends Extension
 {
     /**
@@ -19,11 +24,11 @@ class JulLocationExtension extends Extension
      */
     public function load( array $configs, ContainerBuilder $container )
     {
-        $configuration = new Configuration();
-        $options = $this->processConfiguration( $configuration, $configs );
-        
         $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__.'/../Resources/config' ) );
         $loader->load( 'services.yml' );
+        
+        $configuration = new Configuration();
+        $options = $this->processConfiguration( $configuration, $configs );
         
         $container->setParameter( 'jul_location.options', $options );
     }

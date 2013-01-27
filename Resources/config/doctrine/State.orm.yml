@@ -1,0 +1,46 @@
+#
+# JulLocationBundle Symfony package.
+#
+# © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+#
+# Full license information in the LICENSE text file distributed
+# with this source code.
+#
+
+Jul\LocationBundle\Entity\State:
+
+    type: mappedSuperclass
+    
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    
+    fields:
+        
+        name:
+            type: string
+            length: 128
+            nullable: true
+        
+        long_name:
+            type: string
+            nullable: true
+        
+        short_name:
+            type: string
+            length: 128
+            nullable: true
+        
+        slug:
+            type: string
+            nullable: true
+        
+        latitude:
+            type: float
+            nullable: true
+        
+        longitude:
+            type: float
+            nullable: true
+        

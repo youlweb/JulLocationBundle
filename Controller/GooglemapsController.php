@@ -1,8 +1,14 @@
 <?php 
 
 /*
-Jul's Google maps javascript API default parameters setup
-*/
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ * 
+ */
 
 namespace Jul\LocationBundle\Controller;
 
@@ -23,7 +29,7 @@ class GooglemapsController extends Controller
 			$mapDiv = 'map_canvas',
 			$mapOptions = array(),
 			$acFields = null,
-			$acFallback = false,
+			$addressFallback = false,
 			$latitude = null,
 			$longitude = null
 	)
@@ -78,10 +84,10 @@ class GooglemapsController extends Controller
 		
 		/*
 		 * Default autocomplete input field
-		*/
+		 */
 		if( ! isset( $acFields[ 0 ][ 'acInput' ] ) )
 		{
-			$acFields[ 0 ][ 'acInput' ] = ( $topLevelForm->offsetExists( 'fullname' ) ) ? $topLevelForm->getChild( 'fullname' )->get( 'id' ) : $topLevelForm->getChild( 'name' )->get( 'id' );
+			$acFields[ 0 ][ 'acInput' ] = ( $topLevelForm->offsetExists( 'long_name' ) ) ? $topLevelForm->getChild( 'long_name' )->get( 'id' ) : $topLevelForm->getChild( 'name' )->get( 'id' );
 		}
 		
 		/*
@@ -100,9 +106,9 @@ class GooglemapsController extends Controller
 		/*
 		 * Address autocomplete fallback
 		 */
-		if( $acFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) && $topLevelForm->offsetExists( 'fulladdress' ) )
+		if( $addressFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) && $topLevelForm->offsetExists( 'long_address' ) )
 		{
-			$acFields[ 1 ][ 'acInput' ] = ( $topLevelForm->offsetExists( 'fullname' ) ) ? $topLevelForm->getChild( 'fulladdress' )->get( 'id' ) : $topLevelForm->getChild( 'address' )->get( 'id' );
+			$acFields[ 1 ][ 'acInput' ] = ( $topLevelForm->offsetExists( 'long_name' ) ) ? $topLevelForm->getChild( 'long_address' )->get( 'id' ) : $topLevelForm->getChild( 'address' )->get( 'id' );
 			$acFields[ 1 ][ 'acOptions' ][ 'types' ] = array( 'geocode' );
 		}
 		
@@ -115,7 +121,7 @@ class GooglemapsController extends Controller
 		
 		foreach( $this->container->parameters[ 'jul_location.options' ] as $level => $options )
 		{
-			$fields = $options['inputFields'];
+			$fields = $options['fields'];
 			
 			$tmpArray = array();
 			

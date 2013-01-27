@@ -1,6 +1,14 @@
+
 /*
- * Jul's Google map autocomplete interface script
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ *
  */
+
 function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitude, longitude, photoSelectorText, photoSelectedText, jsFieldIds ){
 	
 	/*
@@ -44,8 +52,13 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 		
 		autoComplete[ acCount ] = new google.maps.places.Autocomplete( acInput[ acCount ], acFields[ acCount ].acOptions );
 	
-		// capture Gmap 'enter' to avoid impromptue submission
-		google.maps.event.addDomListener( acInput[ acCount ], 'keydown', function(e) { if (e.keyCode == 13) { if (e.preventDefault) e.preventDefault(); else{ e.cancelBubble = true; e.returnValue = false;}}});
+		/*
+		 * Caputre [ENTER] key press if required
+		 */
+		if( typeof acFields[ acCount ].captureEnter === 'undefined' || acFields[ acCount ].captureEnter )
+		{
+			google.maps.event.addDomListener( acInput[ acCount ], 'keydown', function(e) { if (e.keyCode == 13) { if (e.preventDefault) e.preventDefault(); else{ e.cancelBubble = true; e.returnValue = false; } } } );
+		}
 		
 		/*
 		 * Autocomplete listener
@@ -57,7 +70,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 			/*
 			 * Outputs the place results in the javascript console
 			 */
-			console.log(place);
+			console.log( place );
 			
 			/*
 			 * If there's a map, show marker
@@ -65,40 +78,46 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 			if( map && place.geometry )
 			{
 				infowindow.close();
-				marker.setVisible(false);
+				marker.setVisible( false );
 				
-				// If the place has a geometry, then present it on a map
-				
-				if (place.geometry.viewport) {
-					map.fitBounds(place.geometry.viewport);
-				} else {
-					map.setCenter(place.geometry.location);
-					map.setZoom(zoomResolved);
+				/*
+				 * If the place has a geometry, then present it on a map
+				 */
+				if ( place.geometry.viewport ){
+					map.fitBounds( place.geometry.viewport );
+				}else{
+					map.setCenter( place.geometry.location );
+					map.setZoom( zoomResolved );
 				}
-				marker.setPosition(place.geometry.location);
-				marker.setVisible(true);
+				marker.setPosition( place.geometry.location );
+				marker.setVisible( true );
 			}
 			
-			// Reset fields
-			
+			/*
+			 * Rest fields
+			 */
 			for( tmpLevel in jsFieldIds )
 			{
-				for( tmpField in jsFieldIds[tmpLevel] )
+				for( tmpField in jsFieldIds[ tmpLevel ] )
 				{
+					// Don't reset the main autocomplete field
+					if( acFields[ 0 ].acInput == jsFieldIds[ tmpLevel ][ tmpField ] ) continue;
+					
 					if( ( componentField = document.getElementById( jsFieldIds[ tmpLevel ][ tmpField ] ) ) !== null ) componentField.value = '';
 				}
 			}
 			
-			// Level specific place details components
-			
+			/*
+			 * Level specific place details components
+			 */
 			if( topLevel == 'location' )
 			{
-				if( ( componentField = document.getElementById( jsFieldIds.location.fulladdress ) ) !== null ) componentField.value = place.formatted_address;
-				if( place.website && ( componentField = document.getElementById( jsFieldIds.location.website ) ) !== null ) componentField.value = place.website;
+				if( ( componentField = document.getElementById( jsFieldIds.location.long_address ) ) !== null ) componentField.value = place.formatted_address;
+				if( place.website && ( componentField = document.getElementById( jsFieldIds.location.website_url ) ) !== null ) componentField.value = place.website;
 				if( place.international_phone_number && ( componentField = document.getElementById( jsFieldIds.location.phone ) ) !== null ) componentField.value = place.international_phone_number;
 				
-				// imagePath defaults to url of first Photo result
-				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.imagePath ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.fife_url;
+				// image_url defaults to url of first Photo result
+				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.fife_url;
 			}
 		
 			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.name' ) ) ) !== null ) componentField.value = place.name;
@@ -136,12 +155,12 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 					
 					case 'administrative_area_level_1':
 						if( ( componentField = document.getElementById( jsFieldIds.state.name ) ) !== null ) componentField.value = addressComponent.long_name;
-						if( ( componentField = document.getElementById( jsFieldIds.state.shortname ) ) !== null ) componentField.value = addressComponent.short_name;
+						if( ( componentField = document.getElementById( jsFieldIds.state.short_name ) ) !== null ) componentField.value = addressComponent.short_name;
 					break;
 					
 					case 'country':
 						if( ( componentField = document.getElementById( jsFieldIds.country.name ) ) !== null ) componentField.value = addressComponent.long_name;
-						if( ( componentField = document.getElementById( jsFieldIds.country.shortname ) ) !== null ) componentField.value = addressComponent.short_name;
+						if( ( componentField = document.getElementById( jsFieldIds.country.short_name ) ) !== null ) componentField.value = addressComponent.short_name;
 					break;
 				}
 			}
@@ -162,14 +181,14 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 					
 					for( var a = 0; a < photos.length; a ++)
 					{
-						htmlString += '<li><img id="JulLocationPhoto_' + a + '" src="' + photos[ a ].raw_reference.fife_url + '" class="JulLocationPhotoImg" onClick="setImagePath( ' + a + ', ' + photos.length + ', \'' + photos[ a ].raw_reference.fife_url + '\' )" /></li>';
+						htmlString += '<li><img id="JulLocationPhoto_' + a + '" src="' + photos[ a ].raw_reference.fife_url + '" class="JulLocationPhotoImg" onClick="setImageUrl( ' + a + ', ' + photos.length + ', \'' + photos[ a ].raw_reference.fife_url + '\' )" /></li>';
 					}
 					
 					htmlString += '</ul>';
 					
 					componentField.innerHTML = htmlString;
 					
-					// Preselect first photo to reflect default imagePath value
+					// Preselect first photo to reflect default image_url value
 					
 					document.getElementById( 'JulLocationPhoto_0' ).className = 'JulLocationPhotoImg JulLocationPhotoImgSelected';
 				}
@@ -178,17 +197,17 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 	}
 	
 	/*
-	 * If form is sent and imagePath as a value, display selected photo in the photo selector
+	 * If form is sent and image_url as a value, display selected photo in the photo selector
 	 */
-	if( ( componentField = document.getElementById('JulLocationPhotoSelector') ) !== null && ( imageField = document.getElementById( jsFieldIds.location.imagePath ) ) !== null && ( imagePath = imageField.value ) )
+	if( ( componentField = document.getElementById('JulLocationPhotoSelector') ) !== null && ( imageField = document.getElementById( jsFieldIds.location.image_url ) ) !== null && ( image_url = imageField.value ) )
 	{
-		componentField.innerHTML = '<div class="JulLocationPhotoSelectorText">' + photoSelectedText + '</div><ul><li><img id="JulLocationPhotoSelected" src="' + imagePath + '" /></li></ul>';
+		componentField.innerHTML = '<div class="JulLocationPhotoSelectorText">' + photoSelectedText + '</div><ul><li><img id="JulLocationPhotoSelected" src="' + image_url + '" /></li></ul>';
 	}
 	
 	/*
 	 * Selects a photo when photo selector is present
 	 */
-	setImagePath = function( elementId, arrayLength, imagePath )
+	setImageUrl = function( elementId, arrayLength, image_url )
 	{
 		// Apply not selected style to all photos
 		for( var a = 0; a < arrayLength; a ++ ) document.getElementById( 'JulLocationPhoto_' + a ).className = 'JulLocationPhotoImg';
@@ -196,7 +215,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 		// Apply selected style to selected photo
 		document.getElementById( 'JulLocationPhoto_' + elementId ).className = 'JulLocationPhotoImg JulLocationPhotoImgSelected';
 		
-		// Update imagePath field value
-		if( ( componentField = document.getElementById( jsFieldIds.location.imagePath ) ) !== null ) componentField.value = imagePath;
+		// Update image_url field value
+		if( ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = image_url;
 	}
 }

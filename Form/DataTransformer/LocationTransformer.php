@@ -1,79 +1,93 @@
 <?php 
 
+/*
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ *
+ */
+
 namespace Jul\LocationBundle\Form\DataTransformer;
 
+use Jul\LocationBundle\Form\Repository\LocationRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-/**
- * Persist / update a Location entity, checking for subclasses duplicates
- * 
- * @author julien
- *
- */
 class LocationTransformer implements DataTransformerInterface
 {
+	/**
+	 * @var string
+	 */
+	private $entityType;
+	
 	/**
 	 * @var ObjectManager
 	 */
 	private $om;
 	
 	/**
+	 * Options sent via form Type
+	 * 
+	 * @var array
+	 */
+	private $configOptions;
+	
+	/**
+	 * @param string $entityType
 	 * @param ObjectManager $om
+	 * @param array $configOptions
 	 */
-	public function __construct( ObjectManager $om )
+	public function __construct( $entityType, ObjectManager $om, $configOptions )
 	{
+		$this->entityType = $entityType;
 		$this->om = $om;
+		$this->configOptions = $configOptions;
 	}
 	
-	/**
-	 * Transforms a Location object
-	 * 
-	 * @param Location|null $location
-	 * @return Location
+	/** 
+	 * @param Object|null $entityObject
+	 * @return Object
 	 */
-	public function transform( $location )
+	public function transform( $entityObject )
 	{
-		if( null === $location )
-		{
-			return null;
-		}
+		if( null === $entityObject ) return null;
 		
-		return $location;
+		return $entityObject;
 	}
 	
 	/**
-	 * Processes a Location Object
-	 * 
-	 * @param Location|null $location
-	 * @return Location
+	 * @param Object|null $entityObject
+	 * @return Object
 	 */
-	public function reverseTransform( $location )
+	public function reverseTransform( $entityObject )
 	{
 		/*
-		 * Check if Location exists
-		*/
-		$locationDB = $this	-> om
-							-> getRepository( 'JulLocationBundle:Location' )
-							-> getOneByLocationObject( $location );
+		 * Check if Entity exists
+		 */
+		$locationRepository = new LocationRepository( $this->entityType, $this->om, $this->configOptions );
 		
-		if( $locationDB )
+		$entityDB = $locationRepository->findEntityObject( $entityObject );
+		
+		if( $entityDB )
 		{
 			// if Location found in DB
 			
-			if( $this->om->contains( $location ) )
+			if( $this->om->contains( $entityObject ) )
 			{
 				/*
 				 * if entity is managed ( update process ):
 				 * - restore the managed entity to its original state to preserve its data content
 				 * - return the DB entity
 				 */
-				$this->om->refresh( $location );
+				$this->om->refresh( $entityObject );
 			}
 		
-			return $locationDB;
+			return $entityDB;
 		}
-		elseif( $this->om->contains( $location ) )
+		elseif( $this->om->contains( $entityObject ) )
 		{
 			/*
 			 * if Location is not found in DB, but entity is managed ( update process ):
@@ -81,14 +95,14 @@ class LocationTransformer implements DataTransformerInterface
 			 * - free the original from management to preserve its data content
 			 * - persist the clone
 			 */
-			$newLocation = clone $location;
-			$newLocation->setSlug( null );	// to trigger Gedmo slug
-			$this->om->detach( $location );
-			$location = $newLocation;
+			$newEntity = clone $entityObject;
+			$newEntity->setSlug( null );	// to trigger Gedmo slug
+			$this->om->detach( $entityObject );
+			$entityObject = $newEntity;
 		}
 		
-		$this->om->persist( $location );
+		$this->om->persist( $entityObject );
 		
-		return $location;
+		return $entityObject;
 	}
 }
