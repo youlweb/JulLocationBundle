@@ -13,8 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.1",
-        "symfony/framework-bundle": ">=2.1,<2.3-dev",
-        "gedmo/doctrine-extensions": "dev-master"
+        "symfony/framework-bundle": ">=2.1,<2.3-dev"
     },
     "autoload": {
         "psr-0": { "Jul\\LocationBundle": "" }

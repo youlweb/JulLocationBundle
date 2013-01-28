@@ -1,6 +1,6 @@
+/.gitignore
 /phpunit.xml
-*~
-.gitignore
-composer.lock
-composer.phar
+/composer.lock
+/composer.phar
 /vendor/
+*~
