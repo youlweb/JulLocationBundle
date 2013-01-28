@@ -90,7 +90,7 @@ class LocationRepository extends EntityRepository
 					{
 						$method = 'get' . Inflector::classify( $field );
 						
-						$query	->andWhere( "{$entityAlias}.{$field} = :{$entity}{$field} OR ( {$entityAlias} IS NOT NULL AND {$entityAlias}.{$field} IS NULL AND :{$entity}{$field} IS NULL )" )
+						$query	->andWhere( "{$entityAlias}.{$field} LIKE :{$entity}{$field} OR ( {$entityAlias} IS NOT NULL AND {$entityAlias}.{$field} IS NULL AND :{$entity}{$field} IS NULL )" )
 								->setParameter( $entity . $field, $entityObject->$method() );
 					}
 				}
