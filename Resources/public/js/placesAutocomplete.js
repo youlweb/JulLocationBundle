@@ -119,8 +119,10 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 				// image_url defaults to url of first Photo result
 				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.fife_url;
 			}
-		
-			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.name' ) ) ) !== null ) componentField.value = place.name;
+			
+			// Assign a place name if not a street name
+			if( place.types[ 0 ] !== 'street_address' && place.types[ 0 ] !== 'route' && ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.name' ) ) ) !== null ) componentField.value = place.name;
+			
 			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.latitude' ) ) ) !== null ) componentField.value = place.geometry.location.lat();
 			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.longitude' ) ) ) !== null ) componentField.value = place.geometry.location.lng();
 			
