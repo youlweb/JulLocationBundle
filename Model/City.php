@@ -50,11 +50,6 @@ abstract class City
 	 */
 	protected $longitude;
 	
-	/**
-	 * @var State
-	 */
-	protected $state;
-	
 	/*
 	 * --------------------------------------------------------
 	 */
@@ -182,29 +177,6 @@ abstract class City
 	public function getLongitude()
 	{
 		return $this->longitude;
-	}
-	
-	/**
-	 * Set state
-	 *
-	 * @param State|null $state
-	 * @return City
-	 */
-	public function setState( $state = null)
-	{
-		$this->state = $state;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get state
-	 *
-	 * @return State|null
-	 */
-	public function getState()
-	{
-		return $this->state;
 	}
 	
 	/**

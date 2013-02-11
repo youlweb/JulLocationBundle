@@ -12,14 +12,19 @@
 
 namespace Jul\LocationBundle\Form\Type;
 
+use Jul\LocationBundle\Form\DataTransformer\LocationTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Jul\LocationBundle\Form\DataTransformer\LocationTransformer;
 
 class LocationType extends AbstractType
 {
+	/**
+	 * @var string
+	 */
+	private $entityType;
+	
 	/**
 	 * @var ObjectManager;
 	 */
@@ -33,31 +38,52 @@ class LocationType extends AbstractType
 	private $configOptions;
 	
 	/**
+	 * @param string $entityType
 	 * @param ObjectManager $om
 	 * @param array $configOptions
 	 */
-	public function __construct( ObjectManager $om, $configOptions )
+	public function __construct( $entityType, ObjectManager $om, $configOptions )
 	{
+		$this->entityType = $entityType;
 		$this->om = $om;
 		$this->configOptions = $configOptions;
 	}
 	
 	public function buildForm( FormBuilderInterface $builder, array $options )
 	{
+		$entitiesArray = array(
+				'location' => array( 'city', 'state', 'country' ),
+				'city' => array( 'state', 'country' ),
+				'state' => array( 'country' ),
+				'country' => array()
+		);
+		
 		/*
 		 * Generate form builder fields from config
 		 */
-		foreach( $this->configOptions[ 'location' ][ 'fields' ] as $field => $fieldArray )
-		{
+		foreach( $this->configOptions[ $this->entityType ][ 'fields' ] as $field => $fieldArray )
+		{	
 			if( $fieldArray[ 'enabled' ] )
 			{
+				// Set HTML5 'required' option according to config
+				if( ! isset( $fieldArray[ 'options' ][ 'required' ] ) ) $fieldArray[ 'options' ][ 'required' ] = $this->configOptions[ $this->entityType ][ 'fields' ][ $field ][ 'required' ];
+				
 				$builder->add( $field, $fieldArray[ 'type' ], $fieldArray[ 'options' ] );
 			}
 		}
 		
-		if( $this->configOptions[ 'city' ][ 'data_class' ] ) $builder->add( 'city', 'JulCityField' );
+		foreach( $entitiesArray[ $this->entityType ] as $entity )
+		{
+			if( ! $this->configOptions[ $entity ][ 'data_class' ] ) continue;
+			
+			if( $this->configOptions[ $entity ][ 'data_class' ] )
+			{
+				$builder->add( $entity, 'Jul' . ucfirst( $entity ) . 'Field' );
+				break;
+			}
+		}
 		
-		$transformer = new LocationTransformer( 'location', $this->om, $this->configOptions );
+		$transformer = new LocationTransformer( $this->entityType, $this->om, $this->configOptions );
 		
 		$builder->addModelTransformer( $transformer );
 	}
@@ -69,16 +95,16 @@ class LocationType extends AbstractType
 		 */
 		$validationArray = array();
 		
-		foreach( $this->configOptions[ 'location' ][ 'fields' ] as $field => $fieldArray )
+		foreach( $this->configOptions[ $this->entityType ][ 'fields' ] as $field => $fieldArray )
 		{
 			if( $fieldArray[ 'enabled' ] && $fieldArray[ 'required' ] )
 			{
-				array_push( $validationArray, "location_$field" );
+				array_push( $validationArray, $this->entityType . '_' . $field );
 			}
 		}
 		
 		$resolver->setDefaults( array(
-			'data_class' => $this->configOptions[ 'location' ][ 'data_class' ],
+			'data_class' => $this->configOptions[ $this->entityType ][ 'data_class' ],
 			'validation_groups' => $validationArray,
 			'cascade_validation' => true
 		));
@@ -91,6 +117,6 @@ class LocationType extends AbstractType
 
 	public function getName()
 	{
-		return 'JulLocationField';
+		return 'Jul' . ucfirst( $this->entityType ) . 'Field';
 	}
 }

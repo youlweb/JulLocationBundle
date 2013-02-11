@@ -86,11 +86,6 @@ abstract class Location
 	 */
 	protected $phone;
 	
-	/**
-	 * @var City
-	 */
-	protected $city;
-	
 	/*
 	 * --------------------------------------------------------
 	 */
@@ -357,30 +352,6 @@ abstract class Location
 	{
 		return $this->phone;
 	}
-	
-	/**
-	 * Set City
-	 * 
-	 * @param City|null $city
-	 * @return Location
-	 */
-	public function setCity( $city = null )
-	{
-		$this->city = $city;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get City
-	 * 
-	 * @return City|null
-	 */
-	public function getCity()
-	{
-		return $this->city;
-	}
-	
 	
 	/**
 	 * Return string value

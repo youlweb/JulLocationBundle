@@ -12,267 +12,274 @@
 
 namespace Jul\LocationBundle\Tests\Form\DataTransformer;
 
-use Jul\LocationBundle\Entity\Location;
-use Jul\LocationBundle\Entity\City;
-use Jul\LocationBundle\Entity\State;
-use Jul\LocationBundle\Entity\Country;
-use Jul\LocationDemoBundle\Form\DataTransformer\LocationTransformer;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Jul\LocationBundle\Form\DataTransformer\LocationTransformer;
 
 /**
- * Caution: this test inserts a bunch of test entities in the DB.
- * 
- * @author julien
- *
+ * CAUTION! The LocationTransformer test uses your DB connection, therefore:
+ * - You must have a working JulLocationBundle setup with configured entities.
+ * - The test will INSERT a random entity in your database.
  */
 class LocationTransformerTest extends WebTestCase
 {
 	/**
+	 * @var LocationTransformer
+	 */
+	private $transformer;
+	
+	/**
 	 * @var \Doctrine\ORM\EntityManager
 	 */
-	protected $om;
+	private $om;
 	
 	/**
-	 * @var \Jul\LocationBundle\Form\DataTransformer\LocationTransformer
+	 * @var array
 	 */
-	protected $entityTransformer;
-	
-	/**
-	 * @var \Jul\LocationBundle\Entity\City
-	 */
-	protected $city;
-	
-	/**
-	 * @var \Jul\LocationBundle\Entity\State
-	 */
-	protected $state;
-	
-	/**
-	 * @var \Jul\LocationBundle\Entity\Country
-	 */
-	protected $country;
-	
-	protected $repository;
+	private $configOptions;
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public function setUp()
 	{
+		/*
+		 * Kernel connection
+		 */
 		static::$kernel = static::createKernel();
 		static::$kernel->boot();
-		
-		$this->om = static::$kernel->getContainer()->get('doctrine')->getEntityManager();
-		
-		$this->entityTransformer = new \Jul\LocationBundle\Form\DataTransformer\LocationTransformer( $this->om );
-		
-		$this->repository = $this->om->getRepository('JulLocationBundle:Location');
+		$this->om = static::$kernel->getContainer()->get( 'doctrine' )->getManager();
 		
 		/*
-		 * Dependent entities
+		 * Load JulLocationBundle user configuration
 		 */
-		$this->country = new Country();
-		$this->country->setName( uniqid( 'test_' ) );
-		$this->om->persist( $this->country );
+		$client = static::createClient();
+		$this->configOptions = $client->getContainer()->getParameter( 'jul_location.options' );
 		
-		$this->state = new State();
-		$this->state->setName( uniqid( 'test_' ) );
-		$this->state->setCountry( $this->country );
-		$this->om->persist( $this->state );
+		/*
+		 * Force field configuration:
+		 * - Every field must be enabled.
+		 * - Every field must be an identifier.
+		 */
+		$this->configOptions[ 'location' ][ 'fields' ] = array(
+				'name' => array( 'enabled' => true, 'identifier' => true ),
+				'long_name' => array( 'enabled' => true, 'identifier' => true ),
+				'address' => array( 'enabled' => true, 'identifier' => true ),
+				'long_address' => array( 'enabled' => true, 'identifier' => true ),
+				'postcode' => array( 'enabled' => true, 'identifier' => true ),
+				'latitude' => array( 'enabled' => true, 'identifier' => true ),
+				'longitude' => array( 'enabled' => true, 'identifier' => true ),
+				'image_url' => array( 'enabled' => true, 'identifier' => true ),
+				'website_url' => array( 'enabled' => true, 'identifier' => true ),
+				'phone' => array( 'enabled' => true, 'identifier' => true )
+		);
+		$this->configOptions[ 'city' ][ 'fields' ] = array(
+				'name' => array( 'enabled' => true, 'identifier' => true ),
+				'long_name' => array( 'enabled' => true, 'identifier' => true ),
+				'latitude' => array( 'enabled' => true, 'identifier' => true ),
+				'longitude' => array( 'enabled' => true, 'identifier' => true )
+		);
+		$this->configOptions[ 'state' ][ 'fields' ] = array(
+				'name' => array( 'enabled' => true, 'identifier' => true ),
+				'long_name' => array( 'enabled' => true, 'identifier' => true ),
+				'short_name' => array( 'enabled' => true, 'identifier' => true ),
+				'latitude' => array( 'enabled' => true, 'identifier' => true ),
+				'longitude' => array( 'enabled' => true, 'identifier' => true )
+		);
+		$this->configOptions[ 'country' ][ 'fields' ] = array(
+				'name' => array( 'enabled' => true, 'identifier' => true ),
+				'short_name' => array( 'enabled' => true, 'identifier' => true ),
+				'latitude' => array( 'enabled' => true, 'identifier' => true ),
+				'longitude' => array( 'enabled' => true, 'identifier' => true )
+		);
 		
-		$this->city = new City();
-		$this->city->setName( uniqid( 'test_' ) );
-		$this->city->setState( $this->state );
-		$this->om->persist( $this->city );
+		/*
+		 * Transformer instance
+		 */
+		$this->transformer = new LocationTransformer( 'location', $this->om, $this->configOptions );
 	}
 	
-	/*
-	 * This test enforces that the entity form type data transformer
-	 * doesn't allow entities with existing names to be added in the DB.
-	 * 
-	 * ------------------------------------------------------------------
-	 * This test applies in the 'CREATE' context, where the entity is not
-	 * managed by Doctrine's object manager
-	 * 
-	 */
-	public function testReverseTransformCreate()
+	public function testTransform()
 	{
-		/*
-		 * Generate a unique random entity name
-		 */
-		$entityName = uniqid( 'test_' );
+		$location = $this->getLocation();
+		$this->assertEquals( $location->getId(), $this->transformer->transform( $location )->getId() );
+		
+		$location = null;
+		$this->assertNull( $location, $this->transformer->transform( $location ) );
+	}
+	
+	public function testReverseTransform()
+	{
+		echo "\n\n\x1B[31mCAUTION!\x1B[37m The LocationTransformer test uses your DB connection, therefore:";
+		echo "\n - You must have a working JulLocationBundle setup with configured entities.";
+		echo "\n - The test will INSERT random entities in your database.";
 		
 		/*
-		 * Create an entity
-		 */
-		$entity1 = new Location();
-		$entity1->setName( $entityName );
-		$entity1->setCity( $this->city );
-		
-		/*
-		 * Entity has a unique random name, thus not in DB
-		 * The transformer should return the object untouched
+		 * This test enforces that the data transformer doesn't allow entities
+		 * with existing names to be added in the DB.
 		 * 
+		 * This part applies to new entities that are not managed by Doctrine.
 		 */
-		$this->assertEquals( $entity1, $this->entityTransformer->reverseTransform( $entity1 ) );
+		$location = $this->getLocation();
 		
 		/*
-		 * Persist the entity in DB
+		 * This entity is random, thus new, so the transformer should simply return it.
 		 */
-		$this->om->persist( $entity1 );
+		$this->assertEquals( $this->transformer->reverseTransform( $location ), $location );
+		
+		/*
+		 * Copy the entity.
+		 */
+		$locationCopy = clone $location;
+		
+		/*
+		 * Persist original entity in DB.
+		 */
+		$this->om->persist( $location );
 		$this->om->flush();
 		
 		/*
-		 * Store entity's DB Id
+		 * Calling the transformer with the clone should return the original DB entity.
 		 */
-		$entityId = $entity1->getId();
+		$this->assertEquals( $this->transformer->reverseTransform( $locationCopy )->getId(), $location->getId() );
+		
 		
 		/*
-		 * Create new entity with same name
-		 */
-		$entity2 = new Location();
-		$entity2->setName( $entityName );
-		$entity2->setCity( $this->city );
-		
-		/*
-		 * Entity with similar name exists in DB
-		 * The transformer should return the DB object
+		 * This part applies in the update context, where the entity is
+		 * already managed by Doctrine.
 		 * 
+		 * In this context, additional processing must be done to preserve
+		 * the managed entity's data integrity.
+		 * 
+		 * This test focuses on updating to an entity that doesn't exist
+		 * in the database.
 		 */
-		$this->assertEquals( $entityId, $this->entityTransformer->reverseTransform( $entity2 )->getId() );
-	}
-	
-	/*
-	 * This test applies in the 'UPDATE' context, where the entity is
-	 * already managed by Doctrine's object manager.
-	 * 
-	 * In this context, additional processing must be done to preserve
-	 * the managed entity's data integrity.
-	 * 
-	 * This test focuses on updating to an entity that doesn't exist
-	 * in the database
-	 *
-	 */
-	public function testReverseTransformUpdate()
-	{
-		/*
-		 * Generate a unique random entity name
-		 */
-		$entityName = uniqid( 'test_' );
-	
-		/*
-		 * Create and persist an entity
-		 */
-		$entity1 = new Location();
-		$entity1->setName( $entityName );
-		$entity1->setCity( $this->city );
-		$this->om->persist( $entity1 );
-		$this->om->flush();
+		
+		$location = $this->getLocation();
+		$originalName = $location->getName();
+		$originalId = $location->getId();
 		
 		/*
-		 * Store entity's DB id
+		 * Entity exists in DB, the transformer returns the DB object.
 		 */
-		$entityId = $entity1->getId();
+		$this->assertEquals( $this->transformer->reverseTransform( $location )->getName(), $location->getName() );
 		
 		/*
-		 * Entity with similar name exists in DB
-		 * The transformer should return the DB object
+		 * Update the managed entity by changing its name.
 		 */
-		$this->assertEquals( $entity1, $this->entityTransformer->reverseTransform( $entity1 ) );
-		
-		/*
-		 * We change the name of the managed entity ( update process )
-		 */
-		$entityNewName = uniqid( 'test_' );
-		$entity1->setName( $entityNewName );
+		$newName = uniqid( 'test_' );
+		$location->setName( $newName );
 		
 		/*
 		 * Entity is not found in DB, the transformer should:
-		 * - refresh the managed entity to preserve its original DB data
-		 * - return a new entity with the new name
+		 * - Refresh the managed entity to preserve its original DB data.
+		 * - Return a new entity with the new name.
 		 */
-		$transformedEntity = $this->entityTransformer->reverseTransform( $entity1 );
+		$updatedLocation = $this->transformer->reverseTransform( $location );
 		
 		/*
-		 * First, we check that the old entity kept its name
+		 * Check that the old entity kept its name.
 		 */
-		$this->assertEquals( $entityName, $this->repository->find( $entityId )->getName() );
+		$DBname = $this->om->getRepository( $this->configOptions[ 'location' ][ 'data_class' ] )->find( $originalId )->getName();
+		
+		$this->assertEquals( $originalName, $DBname );
 		
 		/*
-		 * Next, we check that the entity returned by the transformer has the new name
+		 * Check that the entity returned by the transformer has the new name.
 		 */
-		$this->assertEquals( $entityNewName, $transformedEntity->getName() );
-	}
-	
-	/*
-	 * This test applies in the 'UPDATE' context, where the entity is
-	 * already managed by Doctrine's object manager.
-	 *
-	 * In this context, additional processing must be done to preserve
-	 * the managed entity's data integrity.
-	 *
-	 * This test focuses on updating to an entity that already exists
-	 * in the database
-	 *
-	 */
-	public function testReverseTransformUpdateExisting()
-	{
-		/*
-		 * Generate a couple of unique random entities names
-		 */
-		$entityName1 = uniqid( 'test_' );
-		$entityName2 = uniqid( 'test_' );
-	
-		/*
-		 * Create & persist a couple of entities
-		 */
-		$entity1 = new Location();
-		$entity1->setName( $entityName1 );
-		$entity1->setCity( $this->city );
-		$this->om->persist( $entity1 );
-		
-		$entity2 = new Location();
-		$entity2->setName( $entityName2 );
-		$entity2->setCity( $this->city );
-		$this->om->persist( $entity2 );
-		
-		$this->om->flush();
+		$this->assertEquals( $newName, $updatedLocation->getName() );
 		
 		/*
-		 * Store entities' DB ids
+		 * This part applies in the update context, where the entity is
+		 * already managed by Doctrine.
+		 *
+		 * This test focuses on updating to an entity that already exists
+		 * in the database.
 		 */
-		$entity1Id = $entity1->getId();
-		$entity2Id = $entity2->getId();
+		
+		/*
+		 * Persist two identical random entities with different names
+		 */
+		$location1 = $this->getLocation();
+		$location2 = clone $location1;
+		$location2->setName( uniqid( 'test_' ) );
+		$this->om->persist( $location2 );
+		$this->om->flush( $location2 );
+		
+		$location1Id = $location1->getId();
+		$location2Id = $location2->getId();
+		$location1Name = $location1->getName();
+		$location2Name = $location2->getName();
 		
 		/*
 		 * Change name of second entity to that of first entity
 		 */
-		$entity2->setName( $entityName1 );
+		$location2->setName( $location1Name );
 		
 		/*
-		 * Entity is found in DB, the transformer should:
-		 * - refresh the managed entity to preserve its original DB data
-		 * - return the entity with the same name found in DB ( entity1 )
-		 */
-		$transformedEntity = $this->entityTransformer->reverseTransform( $entity2 );
+		 * Check that the transformer returned the entity with the same name
+		*/
+		$this->assertEquals( $this->transformer->reverseTransform( $location2 )->getId(), $location1->getId() );
 		
 		/*
-		 * First, we check that the old entity kept its name
+		 * Check that DB location2 kept its name
 		 */
-		$this->assertEquals( $entityName2, $this->repository->find( $entity2Id )->getName() );
-		
-		/*
-		 * Lastly, we check that the transformer returned the entity with the same name found in DB ( entity1 )
-		 */
-		$this->assertEquals( $entity1, $transformedEntity );
+		$DBname = $this->om->getRepository( $this->configOptions[ 'location' ][ 'data_class' ] )->find( $location2Id )->getName();
+		$this->assertEquals( $location2Name, $DBname );	
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Create a fully random Location entity
+	 * 
+	 * @return Location
 	 */
-	protected function tearDown()
+	private function getLocation( $persist = true )
 	{
-		parent::tearDown();
-		$this->om->close();
+		$location = new $this->configOptions[ 'location' ][ 'data_class' ];
+		$city = new $this->configOptions[ 'city' ][ 'data_class' ];
+		$state = new $this->configOptions[ 'state' ][ 'data_class' ];
+		$country = new $this->configOptions[ 'country' ][ 'data_class' ];
+		
+		$location->setName( uniqid( 'test_' ) );
+		$location->setLongName( uniqid( 'test_' ) );
+		$location->setAddress( uniqid( 'test_' ) );
+		$location->setLongAddress( uniqid( 'test_' ) );
+		$location->setPostcode( rand( 10000, 99999 ) );
+		$location->setLatitude( rand( 1, 10000 ) );
+		$location->setLongitude( rand( 1, 10000) );
+		$location->setImageUrl( uniqid( 'test_' ) );
+		$location->setWebsiteUrl( uniqid( 'test_' ) );
+		$location->setPhone( uniqid( 'test_' ) );
+		
+		$city->setName( uniqid( 'test_' ) );
+		$city->setLongName( uniqid( 'test_' ) );
+		$city->setLatitude( rand( 1, 10000 ) );
+		$city->setLongitude( rand( 1, 10000 ) );
+		
+		$state->setName( uniqid( 'test_' ) );
+		$state->setLongName( uniqid( 'test_' ) );
+		$state->setShortName( uniqid( 'test_' ) );
+		$state->setLatitude( rand( 1, 10000 ) );
+		$state->setLongitude( rand( 1, 10000 ) );
+		
+		$country->setName( uniqid( 'test_' ) );
+		$country->setShortName( uniqid( 'test_' ) );
+		$country->setLatitude( rand( 1, 10000 ) );
+		$country->setLongitude( rand( 1, 10000 ) );
+		
+		$state->setCountry( $country );
+		$city->setState( $state );
+		$location->setCity( $city );
+		
+		if( $persist )
+		{
+			$this->om->persist( $country );
+			$this->om->persist( $state );
+			$this->om->persist( $city );
+			$this->om->persist( $location );
+			
+			$this->om->flush();
+		}
+		
+		return $location;
 	}
 }

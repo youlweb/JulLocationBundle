@@ -26,12 +26,12 @@ class GooglemapsController extends Controller
 			$locationForm,
 			$zoomDefault = null,
 			$zoomResolved = 17,
+			$latitude = null,
+			$longitude = null,
 			$mapDiv = 'map_canvas',
 			$mapOptions = array(),
 			$acFields = null,
-			$addressFallback = false,
-			$latitude = null,
-			$longitude = null
+			$addressFallback = false
 	)
 	{
 		/*

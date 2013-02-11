@@ -56,11 +56,6 @@ abstract class State
 	 */
 	protected $longitude;
 	
-	/**
-	 * @var Country
-	 */
-	protected $country;
-	
 	/*
 	 * --------------------------------------------------------
 	 */
@@ -211,29 +206,6 @@ abstract class State
 	public function getLongitude()
 	{
 		return $this->longitude;
-	}
-	
-	/**
-	 * Set country
-	 *
-	 * @param Country|null $country
-	 * @return State
-	 */
-	public function setCountry( $country = null)
-	{
-		$this->country = $country;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get country
-	 *
-	 * @return Country|null
-	 */
-	public function getCountry()
-	{
-		return $this->country;
 	}
 	
 	/**

@@ -12,7 +12,7 @@
 
 namespace Jul\LocationBundle\Form\DataTransformer;
 
-use Jul\LocationBundle\Form\Repository\LocationRepository;
+use Jul\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 

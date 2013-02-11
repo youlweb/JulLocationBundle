@@ -1,20 +1,28 @@
-This bundle is in development. You may try it in a dev environment, but tests have not been written for it yet.
+JulLocationBundle for Symfony
+=============================
 
-You are using this bundle at your own risks!
+JulLocationBundle provides 4 preconfigured location entities:
 
-Full documentation and tests are expected mid 02-2013
+- `Location`
+- `City`
+- `State`
+- `Country`
 
-JulLocationBundle provides 4 location entities configured to avoid duplicates:
+The main purpose of JulLocationBundle is to enforce that your dataset is free
+of duplicate entries, according to criterias of your choosing.
 
-1. `Location`
-2. `City`
-3. `State`
-4. `Country`
+Basically, if you want only one `Country` named 'United States' in your database, and 
+all your `States` referring to it automatically, you're in the right place.
 
-You can use as little as the `Country` entity, or as much as the full precision
-`Location` entity, and everything in between.
+In addition, a Googlemap places autocomplete implementation is available to feed 
+the entities with properly formatted data, show the location on a map,
+and even offer photos of the location when available.
 
-In addition, a Googlemap places autocomplete implementation can be activated 
-to feed the entities with properly formatted data, show the location on a map,
-and even offer photos of the locations when available.
+## Documentation summary
+
+1. [Installation & basic setup](installation_basic_setup.md)
+2. [Google places autocomplete basic setup](google_places_autocomplete_basic_setup.md)
+3. [Google places autocomplete advanced use](google_places_autocomplete_advanced use.md)
+4. [Choosing a top level entity](top_level_entity.md)
+5. [Full configuration options](configuration.md)
 
