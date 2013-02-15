@@ -70,7 +70,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 			/*
 			 * Outputs the place results in the javascript console
 			 */
-			console.log( place );
+			//console.log( place );
 			
 			/*
 			 * If there's a map, show marker
