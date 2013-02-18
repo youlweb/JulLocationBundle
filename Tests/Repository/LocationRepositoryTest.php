@@ -50,6 +50,14 @@ class LocationRepositoryTest extends WebTestCase
 		$client = static::createClient();
 		$this->configOptions = $client->getContainer()->getParameter( 'jul_location.options' );
 		
+		if(
+				! $this->configOptions[ 'location' ][ 'data_class' ] ||
+				! $this->configOptions[ 'city' ][ 'data_class' ] ||
+				! $this->configOptions[ 'state' ][ 'data_class' ] ||
+				! $this->configOptions[ 'country' ][ 'data_class' ]
+					
+		) throw new \Exception( 'Every entity in the JulLocationBundle must be configured.' );
+		
 		/*
 		 * Force field configuration:
 		 * - Every field must be enabled.
@@ -88,10 +96,19 @@ class LocationRepositoryTest extends WebTestCase
 		);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function tearDown()
+	{
+		parent::tearDown();
+		$this->om->close();
+	}
+	
 	public function testLocationRepository()
 	{
 		echo "\n\n\x1B[31mCAUTION!\x1B[37m The LocationRepository test uses your DB connection, therefore:";
-		echo "\n - You must have a working JulLocationBundle setup with configured entities.";
+		echo "\n - Every entity in the JulLocationBundle must be configured.";
 		echo "\n - The test will INSERT a random entity in your database.";
 		
 		$repository = new LocationRepository( 'location', $this->om, $this->configOptions );

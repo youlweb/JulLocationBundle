@@ -121,7 +121,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 			}
 			
 			// Assign a place name if not a street name
-			if( place.types[ 0 ] !== 'street_address' && place.types[ 0 ] !== 'route' && ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.name' ) ) ) !== null ) componentField.value = place.name;
+			if( place.types && place.types[ 0 ] !== 'street_address' && place.types[ 0 ] !== 'route' && ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.name' ) ) ) !== null ) componentField.value = place.name;
 			
 			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.latitude' ) ) ) !== null ) componentField.value = place.geometry.location.lat();
 			if( ( componentField = document.getElementById( eval( 'jsFieldIds.' + topLevel + '.longitude' ) ) ) !== null ) componentField.value = place.geometry.location.lng();

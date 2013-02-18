@@ -11,6 +11,11 @@ by glancing at their [documentation](http://developers.google.com/maps/documenta
 It is also important that you read the [Google places autocomplete basic setup](google_places_autocomplete_basic_setup.md) page,
 and try it for yourself, to see what it does.
 
+**Caution:** The Google places API has proven to be quite inconsistent. For instance, when
+querying places in the same city, one will return a `State` address component, and another
+will not. The `Country`'s long name may be 'United States' for one place, and 'US' for the
+other. This will unfortunately affect the integrity of your JulLocationBundle data.
+
 ## Full configuration
 
 JulLocationBundle configuration takes place in the Twig template where your form resides.

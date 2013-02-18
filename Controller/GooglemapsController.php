@@ -14,11 +14,6 @@ namespace Jul\LocationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-/**
- * 
- * @author julien
- *
- */
 class GooglemapsController extends Controller
 {
 	public function placesAutocompleteAction
@@ -35,7 +30,7 @@ class GooglemapsController extends Controller
 	)
 	{
 		/*
-		 * Find location top level
+		 * Find top level entity
 		 */
 		$locationTypes = array( 'location', 'city', 'state', 'country' );
 		
@@ -44,6 +39,16 @@ class GooglemapsController extends Controller
 			if( $locationForm->offsetExists( $locationType ) )
 			{
 				$topLevel = $locationType;
+				$topLevelForm = $locationForm->getChild( $topLevel );
+				
+				break;
+			}
+			
+			if( $locationForm->getName() == 'Jul' . ucfirst( $locationType ) . 'Field' )
+			{
+				$topLevel = $locationType;
+				$topLevelForm = $locationForm;
+				
 				break;
 			}
 		}
@@ -52,8 +57,6 @@ class GooglemapsController extends Controller
 		 * Top level not found
 		 */
 		if( ! isset( $topLevel ) ) throw new \Exception( 'There is no location field in the form sent to the controller JulLocationBundle:Googlemaps:placesAutocomplete' );
-		
-		$topLevelForm = $locationForm->getChild( $topLevel );
 		
 		/*
 		 * Default map center and zoom

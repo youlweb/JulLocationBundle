@@ -1,0 +1,37 @@
+<?php 
+
+/*
+ * JulLocationBundle Symfony package.
+ *
+ * © 2013 Julien Tord <http://github.com/youlweb/JulLocationBundle>
+ *
+ * Full license information in the LICENSE text file distributed
+ * with this source code.
+ *
+ */
+
+namespace Jul\LocationBundle\Tests\Controller;
+
+use Jul\LocationBundle\Controller\GooglemapsController;
+
+class GooglemapsControllerTest extends \PHPUnit_Framework_TestCase
+{
+	
+	public function testPlacesAutocompleteAction()
+	{
+		$controller = new GooglemapsController();
+		
+		$form = $this
+		->getMockBuilder('Symfony\Tests\Component\Form\FormInterface')
+		->setMethods(array('createView'))
+		->getMock()
+		;
+		
+		$form->expects( $this->any() )
+		->method( 'offsetExists' )
+		->will( $this->returnValue( false ) )
+		;
+		
+		$view = $controller->placesAutocompleteAction( $form );
+	}
+}

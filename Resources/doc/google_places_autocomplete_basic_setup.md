@@ -12,6 +12,11 @@ Upon clicking a suggestion:
 - Display the location on a map.
 - Offer to select a photograph of the location if available.
 
+**Caution:** The Google places API has proven to be quite inconsistent. For instance, when
+querying places in the same city, one will return a `State` address component, and another
+will not. The `Country`'s long name may be 'United States' for one place, and 'US' for the
+other. This will unfortunately affect the integrity of your JulLocationBundle data.
+
 ## Autocomplete Setup
 
 The Google places autocomplete implementation is called in the template where you render
