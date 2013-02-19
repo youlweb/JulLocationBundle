@@ -117,7 +117,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 				if( place.international_phone_number && ( componentField = document.getElementById( jsFieldIds.location.phone ) ) !== null ) componentField.value = place.international_phone_number;
 				
 				// image_url defaults to url of first Photo result
-				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.fife_url;
+				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.file_url;
 			}
 			
 			// Assign a place name if not a street name
