@@ -16,6 +16,6 @@
  */
 function JulAutoComplete()
 {
-	GmapInit( '{{ mapDiv }}', {{ mapOptions|raw }}, {{ acFields|raw }}, '{{ topLevel }}', {{ zoomResolved }}, {{ latitude }}, {{ longitude }}, '{% trans %}photo.selector{% endtrans %}', '{% trans %}photo.selected{% endtrans %}', {{ jsFieldIds|raw }} );
+	GmapInit( '{{ mapDiv }}', {{ mapOptions|raw }}, {{ acFields|raw }}, '{{ topLevel }}', {{ zoomResolved }}, {{ latitude }}, {{ longitude }}, '{% trans %}photo.selector{% endtrans %}', '{% trans %}photo.selected{% endtrans %}', {{ maxImageWidth }}, {{ maxImageHeight }}, {{ jsFieldIds|raw }} );
 }
 </script>

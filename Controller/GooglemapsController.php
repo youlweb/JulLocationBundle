@@ -26,7 +26,9 @@ class GooglemapsController extends Controller
 			$mapDiv = 'map_canvas',
 			$mapOptions = array(),
 			$acFields = null,
-			$addressFallback = false
+			$addressFallback = false,
+			$maxImageWidth = 200,
+			$maxImageHeight = 200
 	)
 	{
 		/*
@@ -152,7 +154,9 @@ class GooglemapsController extends Controller
 				'zoomResolved' => $zoomResolved,
 				'latitude' => $latitude,
 				'longitude' => $longitude,
-				'jsFieldIds' => json_encode( $jsFieldIds )
+				'jsFieldIds' => json_encode( $jsFieldIds ),
+				'maxImageWidth' => $maxImageWidth,
+				'maxImageHeight' => $maxImageHeight
 				));
 	}
 }

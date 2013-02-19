@@ -9,7 +9,7 @@
  *
  */
 
-function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitude, longitude, photoSelectorText, photoSelectedText, jsFieldIds ){
+function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitude, longitude, photoSelectorText, photoSelectedText, maxImageWidth, maxImageHeight, jsFieldIds ){
 	
 	/*
 	 * Create map if map DIV exists
@@ -94,7 +94,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 			}
 			
 			/*
-			 * Rest fields
+			 * Reset fields
 			 */
 			for( tmpLevel in jsFieldIds )
 			{
@@ -117,7 +117,7 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 				if( place.international_phone_number && ( componentField = document.getElementById( jsFieldIds.location.phone ) ) !== null ) componentField.value = place.international_phone_number;
 				
 				// image_url defaults to url of first Photo result
-				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].raw_reference.file_url;
+				if( place.photos && ( componentField = document.getElementById( jsFieldIds.location.image_url ) ) !== null ) componentField.value = place.photos[ 0 ].getUrl( { 'maxWidth': maxImageWidth, 'maxHeight': maxImageHeight } );
 			}
 			
 			// Assign a place name if not a street name
@@ -183,7 +183,8 @@ function GmapInit( mapDiv, mapOptions, acFields, topLevel, zoomResolved, latitud
 					
 					for( var a = 0; a < photos.length; a ++)
 					{
-						htmlString += '<li><img id="JulLocationPhoto_' + a + '" src="' + photos[ a ].raw_reference.fife_url + '" class="JulLocationPhotoImg" onClick="setImageUrl( ' + a + ', ' + photos.length + ', \'' + photos[ a ].raw_reference.fife_url + '\' )" /></li>';
+						photoUrl =  photos[ a ].getUrl( { 'maxWidth': 200, 'maxHeight': 200 } );
+						htmlString += '<li><img id="JulLocationPhoto_' + a + '" src="' + photoUrl + '" class="JulLocationPhotoImg" onClick="setImageUrl( ' + a + ', ' + photos.length + ', \'' + photoUrl + '\' )" /></li>';
 					}
 					
 					htmlString += '</ul>';
