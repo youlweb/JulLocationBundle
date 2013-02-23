@@ -225,13 +225,13 @@ Next, you must configure your classes in your app's configuration file:
 # app/config/config.yml
 
 jul_location:
-    Location:
+    location:
         data_class: Acme\TravelBundle\Entity\Location
-    City:
+    city:
         data_class: Acme\TravelBundle\Entity\City
-    State:
+    state:
         data_class: Acme\TravelBundle\Entity\State
-    Country:
+    country:
         data_class: Acme\TravelBundle\Entity\Country
 
 ```

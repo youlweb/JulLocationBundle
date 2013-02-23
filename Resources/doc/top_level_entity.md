@@ -105,10 +105,10 @@ Update the JulLocationBundle configuration as follows:
 
 jul_location:
     
-    City:
+    city:
         data_class: Acme\TravelBundle\Entity\City
     
-    Country:
+    country:
         data_class: Acme\TravelBundle\Entity\Country
 
 ```
