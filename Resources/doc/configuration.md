@@ -8,7 +8,7 @@ aspects precisely to tailor JulLocationBundle to your app's needs.
 ## Default configuration
 
 The default configuration options provide a good start to use JulLocationBundle with the Google maps
-autocomplete implementation.
+places autocomplete implementation.
 
 
 ``` yaml
@@ -16,155 +16,155 @@ autocomplete implementation.
 
 jul_location:
     location:
-	data_class: `null`
+	data_class: null
         fields:
             name:
-                enabled: `true`
-                required: `false`
-                identifier: `true`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: true
+                type: null
+                options: []
             long_name:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: null
+                options: []
             address:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: null
+                options: []
             long_address:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: null
+                options: []
             postcode:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: null
+                options: []
             latitude:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: hidden
+                options: []
             longitude:
-                enabled: `true`
-                required: `false`
-                identifier: `true`
-                type: `hidden`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: true
+                type: hidden
+                options: []
             image_url:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: hidden
+                options: []
             website_url:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: null
+                options: []
             phone:
-                enabled: `true`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: false
+                type: null
+                options: []
     city:
-        data_class: `null`
+        data_class: null
         fields:
             name:
-                enabled: `true`
-                required: `false`
-                identifier: `true`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: true
+                type: null
+                options: []
             long_name:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: null
+                options: []
             latitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
             longitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
     state:
-        data_class: `null`
+        data_class: null
         fields:
             name:
-                enabled: `true`
-                required: `false`
-                identifier: `true`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: true
+                type: null
+                options: []
             long_name:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: null
+                options: []
             short_name:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: null
+                options: []
             latitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
             longitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
     country:
-        data_class: `null`
+        data_class: null
         fields:
             name:
-                enabled: `true`
-                required: `false`
-                identifier: `true`
-                type: `null`
-                options: `{}`
+                enabled: true
+                required: false
+                identifier: true
+                type: null
+                options: []
             short_name:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `null`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: null
+                options: []
             latitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
             longitude:
-                enabled: `false`
-                required: `false`
-                identifier: `false`
-                type: `hidden`
-                options: `{}`
+                enabled: false
+                required: false
+                identifier: false
+                type: hidden
+                options: []
 
 ```
 
@@ -172,6 +172,8 @@ jul_location:
 
 Each location entity has a mandatory `data_class` parameter. You must provide the fully qualified
 class name (FQCN) of the classes you created, as per the [Installation & basic setup](installation_basic_setup.md) section of this doc.
+
+I the `data_class` parameter is set to `null`, the corresponding entity will simply be disabled.
 
 The `fields` sections allow you to customize how each field will interact with your app:
 
