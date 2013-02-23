@@ -162,7 +162,7 @@ class HotelType extends AbstractType
     public function setDefaultOptions( OptionsResolverInterface $resolver )
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Acme\TravelBundle\Entity\City',
+            'data_class' => 'Acme\TravelBundle\Entity\Hotel',
             'cascade_validation' => true
         ));
     }
@@ -174,8 +174,6 @@ class HotelType extends AbstractType
 }
 
 ```
-
-> You must also update the `data_class` parameter to point at your top level entity.
 
 Choosing your top level entity gives you the freedom to use only what you need from
 JulLocationBundle, without having to worry about handling duplicate fields.
