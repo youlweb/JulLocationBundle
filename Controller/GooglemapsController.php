@@ -146,7 +146,7 @@ class GooglemapsController extends Controller
 			$jsFieldIds[ $level ] = $tmpArray;
 		}
 		
-		return $this->render('JulLocationBundle:Googlemaps:placesAutocomplete.html.twig', array(				
+		return $this->render( 'JulLocationBundle:Googlemaps:placesAutocomplete.html.twig', array(				
 				'mapDiv' => $mapDiv,
 				'mapOptions' => json_encode( $mapOptions ),
 				'acFields' => json_encode( $acFields ),

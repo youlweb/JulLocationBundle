@@ -1,7 +1,8 @@
-JulLocationBundle for Symfony
-=============================
+JulLocationBundle
+=================
 
-JulLocationBundle provides 4 preconfigured location entities:
+JulLocationBundle has been created to handle `Location` storage within Symfony. It ships
+with 4 preconfigured entities:
 
 - `Location`
 - `City`
@@ -18,11 +19,15 @@ In addition, a Googlemap places autocomplete implementation is available to feed
 the entities with properly formatted data, show the location on a map,
 and even offer photos of the location when available.
 
-## Documentation summary
+Documentation
+-------------
 
-1. [Installation & basic setup](installation_basic_setup.md)
-2. [Google places autocomplete basic setup](google_places_autocomplete_basic_setup.md)
-3. [Google places autocomplete advanced use](google_places_autocomplete_advanced_use.md)
-4. [Choosing a top level entity](top_level_entity.md)
-5. [Full configuration options](configuration.md)
+Learn how to install and use JulLocationBundle in the [documentation](https://github.com/youlweb/JulLocationBundle/tree/master/Resources/doc/index.md)
+
+License
+-------
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+    Resources/meta/LICENSE
 

@@ -42,7 +42,9 @@ Here's the full default configuration:
     acFields: { 0: { 
         acInput: 'fieldId', captureEnter: true, acOptions: {}
     } },
-    addressFallback: false
+    addressFallback: false,
+    maxImageWidth: 200,
+    maxImageHeight: 200
 } %}
 
 <script type="text/javascript">
@@ -73,6 +75,8 @@ Here's the full default configuration:
 
     - To learn more about top level entities, read [Choosing a top level entity](top_level_entity.md).
 - `addressFallback` _(default `false`)_ This feature is described in the next section.
+- `maxImageWidth` _(default `200`)_ Sets the maximum width in pixels of the images requested to the Google places autocomplete API.
+- `maxImageHeight` _(default `200`)_ Sets the maximum height in pixels of the images requested to the Google places autocomplete API.
 
 ## Address fallback
 
