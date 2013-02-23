@@ -16,7 +16,7 @@ places autocomplete implementation.
 
 jul_location:
     location:
-	data_class: null
+        data_class: null
         fields:
             name:
                 enabled: true
