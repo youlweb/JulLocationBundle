@@ -173,7 +173,7 @@ jul_location:
 Each location entity has a mandatory `data_class` parameter. You must provide the fully qualified
 class name (FQCN) of the classes you created, as per the [Installation & basic setup](installation_basic_setup.md) section of this doc.
 
-I the `data_class` parameter is set to `null`, the corresponding entity will simply be disabled.
+If the `data_class` parameter is set to `null`, the corresponding entity will simply be disabled.
 
 The `fields` sections allow you to customize how each field will interact with your app:
 
