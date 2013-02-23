@@ -4,15 +4,15 @@ Google places autocomplete setup
 JulLocationBundle for Symfony includes a Google places autocomplete implementation
 with the following features:
 
-- Autocomplete places suggestions on a `Location` form field.
+- Autocomplete places suggestions on a form field.
 
 Upon clicking a suggestion:
 
-- Fill out the entire `Location` form automatically with relevant data
+- Fill out the form automatically with relevant data
 - Display the location on a map.
-- Offer to select a photograph of the location if available.
+- Offer to select a photograph of the location when available.
 
-**Caution:** The Google places API has proven to be quite inconsistent. For instance, when
+**Caution:** The Google places API has proven to be inconsistent sometimes. For instance, when
 querying places in the same city, one will return a `State` address component, and another
 will not. The `Country`'s long name may be 'United States' for one place, and 'US' for the
 other. This will unfortunately affect the integrity of your JulLocationBundle data.
@@ -89,7 +89,7 @@ Voilà! You should now see a map, and it should point to the location you select
 with the autocomplete field. If the location you selected has photographs, they should
 show under the map.
 
-> If you submit the form and it is not validated, JulLocationBundle will still point the
+> If you submit the form and it is not valid, JulLocationBundle will still point the
 > map to your selected location, and remember the photograph you selected.
 
 ## See also

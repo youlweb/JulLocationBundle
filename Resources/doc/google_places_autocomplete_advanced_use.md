@@ -1,7 +1,7 @@
 Google places autocomplete advanced use
 =======================================
 
-JulLocationBundle Google places autocomplete configuration is handled by 
+JulLocationBundle's Google places autocomplete configuration is handled by 
 the bundle's `GooglemapsController`, which in turn feeds the `placesAutocomplete.js`
 script with a comprehensive set of options and features.
 
@@ -11,7 +11,7 @@ by glancing at their [documentation](http://developers.google.com/maps/documenta
 It is also important that you read the [Google places autocomplete basic setup](google_places_autocomplete_basic_setup.md) page,
 and try it for yourself, to see what it does.
 
-**Caution:** The Google places API has proven to be quite inconsistent. For instance, when
+**Caution:** The Google places API has proven to be inconsistent sometimes. For instance, when
 querying places in the same city, one will return a `State` address component, and another
 will not. The `Country`'s long name may be 'United States' for one place, and 'US' for the
 other. This will unfortunately affect the integrity of your JulLocationBundle data.
@@ -97,7 +97,7 @@ Let's see it in action, first edit your app's config file to enable the `long_ad
 # app/config/config.yml
 
 jul_location:
-    Location:
+    location:
         fields:
             long_address:
                 enabled: true
