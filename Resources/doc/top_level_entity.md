@@ -176,7 +176,7 @@ class HotelType extends AbstractType
 ```
 
 Choosing your top level entity gives you the freedom to use only what you need from
-JulLocationBundle, without having to worry about handling duplicate fields.
+JulLocationBundle, without having to worry about handling duplicate entries.
 
 ## Google places autocomplete implementation
 
