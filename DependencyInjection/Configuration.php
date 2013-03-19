@@ -238,7 +238,7 @@ class Configuration implements ConfigurationInterface
         								->booleanNode('required')->defaultFalse()->end()
         								->booleanNode('identifier')->defaultTrue()->end()
         								->scalarNode('type')->defaultNull()->end()
-        								->variableNode('options')->defaultValue(array( 'label' => 'State' ))->end()
+        								->variableNode('options')->defaultValue(array())->end()
         							->end()
         						->end()
         					->end()

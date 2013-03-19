@@ -7,6 +7,7 @@
 # with this source code.
 #
 
+# Photo selector
 photo:
     selector: Select a photo
     selected: Selected photo

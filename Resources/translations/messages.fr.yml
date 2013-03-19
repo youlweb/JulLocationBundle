@@ -7,6 +7,24 @@
 # with this source code.
 #
 
+# Photo selector
 photo:
     selector: Choisissez une photo
     selected: Photo choisie
+    
+# Form types
+Location: Endroit
+City: Ville
+State: Région
+Country: Pays
+
+# Form fields
+Name: Nom
+Long name: Nom complet
+Short name: Abréviation
+Address: Adresse
+Long address: Adresse complète
+Postcode: Code postal
+Image url: Image
+Website url: Site internet
+Phone: Téléphone
