@@ -6,7 +6,7 @@ default settings.
 
 ## Requirements
 
-JulLocationBundle has been designed and tested with Symfony 2.2.*.
+JulLocationBundle has been designed and tested with Symfony 2.1.*.
 The Googlemap implementation uses the translator on a little chunk of text, and Twig templates.
 
 ## Setup
@@ -64,18 +64,18 @@ use Doctrine\ORM\Mapping as ORM;
 class Hotel
 {
     // your own properties
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumn(onDelete="set null")
      */
     protected $location;
-    
+
     public function setLocation( $location )
     {
         $this->location = $location;
     }
-    
+
     public function getLocation()
     {
         return $this->location;
@@ -101,7 +101,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Location extends BaseLocation
 {
     // your own properties
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(onDelete="set null")
@@ -112,7 +112,7 @@ class Location extends BaseLocation
     {
         $this->city = $city;
     }
-    
+
     public function getCity()
     {
         return $this->city;
@@ -138,7 +138,7 @@ use Doctrine\ORM\Mapping as ORM;
 class City extends BaseCity
 {
     // your own properties
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="State")
      * @ORM\JoinColumn(onDelete="set null")
@@ -149,7 +149,7 @@ class City extends BaseCity
     {
         $this->state = $state;
     }
-    
+
     public function getState()
     {
         return $this->state;
@@ -175,7 +175,7 @@ use Doctrine\ORM\Mapping as ORM;
 class State extends BaseState
 {
     // your own properties
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Country")
      * @ORM\JoinColumn(onDelete="set null")
@@ -186,7 +186,7 @@ class State extends BaseState
     {
         $this->country = $country;
     }
-    
+
     public function getCountry()
     {
         return $this->country;
@@ -246,7 +246,7 @@ $ app/console doctrine:schema:update --force
 
 ```
 
-### Add the Location field to your Hotel form class 
+### Add the Location field to your Hotel form class
 
 Render all the Location fields at once, with a single line of code:
 
@@ -318,7 +318,10 @@ class HotelController extends Controller
     {
         $hotel = new Hotel();
         $form = $this->createForm( new HotelType(), $hotel );
-        
+        return $this->render('AcmeTravelBundle:TravelBundle:new.html.twig', array(
+            'entity' => $hotel,
+            'form'   => $form->createView(),
+            'location'   => $from, // dont pass the creatView !
         ...
 }
 
