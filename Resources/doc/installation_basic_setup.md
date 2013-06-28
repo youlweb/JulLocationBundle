@@ -8,7 +8,7 @@ default settings.
 
 JulLocationBundle has been designed and tested with Symfony 2.1.*.
 
-**For Symfony 2.2.*, 2.3.*, check out the `master` branch.
+**For Symfony 2.2.*, 2.3.*, check out the `master` branch.**
 
 The Googlemap implementation uses the translator on a little chunk of text, and Twig templates.
 
