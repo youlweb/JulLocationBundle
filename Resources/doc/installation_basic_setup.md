@@ -18,7 +18,7 @@ see [Choosing a top level entity](top_level_entity.md).
 ### Add JulLocationBundle to the composer
 
 ``` bash
-$ php composer.phar require jul/location-bundle:dev-master
+$ php composer.phar require jul/location-bundle:1.0
 
 ```
 
