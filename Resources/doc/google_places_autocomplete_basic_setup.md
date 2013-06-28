@@ -36,9 +36,9 @@ your 'new entity' form.
 
 <script src="//maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
-{% render 'JulLocationBundle:Googlemaps:placesAutocomplete' with {
+{% render controller( 'JulLocationBundle:Googlemaps:placesAutocomplete', {
     locationForm: form
-} %}
+} ) %}
 
 <script type="text/javascript">
     window.onload = JulAutoComplete;

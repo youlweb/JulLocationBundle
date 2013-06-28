@@ -7,13 +7,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Bob Dope",
-            "email": "bob.dope@hotmail.com"
+            "name": "Julien Tord",
+            "email": "youlweb@hotmail.com"
         }
     ],
     "require": {
-        "php": ">=5.3.1",
-        "symfony/framework-bundle": ">=2.1,<2.3-dev"
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": ">=2.1,<2.4-dev"
     },
     "autoload": {
         "psr-0": { "Jul\\LocationBundle": "" }

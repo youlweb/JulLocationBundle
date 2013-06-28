@@ -31,7 +31,7 @@ Here's the full default configuration:
 
 <script src="//maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
-{% render 'JulLocationBundle:Googlemaps:placesAutocomplete' with {
+{% render controller( 'JulLocationBundle:Googlemaps:placesAutocomplete', {
     locationForm: form,
     zoomDefault: 3,
     zoomResolved: 17,
@@ -45,7 +45,7 @@ Here's the full default configuration:
     addressFallback: false,
     maxImageWidth: 200,
     maxImageHeight: 200
-} %}
+} ) %}
 
 <script type="text/javascript">
     window.onload = JulAutoComplete;
@@ -115,10 +115,10 @@ Next, configure your Twig template to use the address fallback feature:
 
 <script src="//maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
-{% render 'JulLocationBundle:Googlemaps:placesAutocomplete' with {
+{% render controller( 'JulLocationBundle:Googlemaps:placesAutocomplete', {
     locationForm: form,
     addressFallback: true
-} %}
+} ) %}
 
 <script type="text/javascript">
     window.onload = JulAutoComplete;
@@ -137,7 +137,7 @@ The `addressFallback` option is the equivalent of the following `acFields` confi
 
 ...
 
-{% render 'JulLocationBundle:Googlemaps:placesAutocomplete' with {
+{% render controller( 'JulLocationBundle:Googlemaps:placesAutocomplete', {
     locationForm: form,
     acFields: {
         0: {
@@ -150,7 +150,7 @@ The `addressFallback` option is the equivalent of the following `acFields` confi
         }
     }
 
-} %}
+} ) %}
 
 ...
 
