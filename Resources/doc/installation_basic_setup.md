@@ -7,6 +7,9 @@ default settings.
 ## Requirements
 
 JulLocationBundle has been designed and tested with Symfony 2.1.*.
+
+**For Symfony 2.2.*, 2.3.*, check out the `master` branch.
+
 The Googlemap implementation uses the translator on a little chunk of text, and Twig templates.
 
 ## Setup
@@ -18,7 +21,7 @@ see [Choosing a top level entity](top_level_entity.md).
 ### Add JulLocationBundle to the composer
 
 ``` bash
-$ php composer.phar require jul/location-bundle:1.0
+$ php composer.phar require jul/location-bundle:"1.*"
 
 ```
 
