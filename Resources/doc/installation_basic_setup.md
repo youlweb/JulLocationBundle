@@ -321,10 +321,10 @@ class HotelController extends Controller
     {
         $hotel = new Hotel();
         $form = $this->createForm( new HotelType(), $hotel );
-        return $this->render('AcmeTravelBundle:TravelBundle:new.html.twig', array(
+        
+        return $this->render( 'AcmeTravelBundle:TravelBundle:new.html.twig', array(
             'entity' => $hotel,
             'form'   => $form->createView(),
-            'location'   => $from, // dont pass the creatView !
         ...
 }
 
