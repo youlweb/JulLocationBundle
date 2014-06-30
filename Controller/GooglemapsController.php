@@ -35,8 +35,6 @@ class GooglemapsController extends Controller
 		 * Find top level entity
 		 */
 		$locationTypes = array( 'location', 'city', 'state', 'country' );
-
-		// var_dump($locationForm->children);exit;
 		
 		foreach( $locationTypes as $locationType )
 		{
