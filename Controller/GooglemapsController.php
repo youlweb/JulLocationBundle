@@ -35,19 +35,21 @@ class GooglemapsController extends Controller
 		 * Find top level entity
 		 */
 		$locationTypes = array( 'location', 'city', 'state', 'country' );
+
+		// var_dump($locationForm->children);exit;
 		
 		foreach( $locationTypes as $locationType )
 		{
-			if( array_key_exists( $locationType , $locationForm[ 'children' ] ) )
+			if( array_key_exists( $locationType , $locationForm->children ) )
 			{
 				$topLevel = $locationType;
 
-				$topLevelForm = $locationForm[ 'children' ][ $topLevel ];
+				$topLevelForm = $locationForm->children[ $topLevel ];
 
 				break;
 			}
 
-			if( $locationForm[ 'children' ][ 'name' ] == 'Jul' . ucfirst( $locationType ) . 'Field' )
+			if( $locationForm->children[ 'name' ] == 'Jul' . ucfirst( $locationType ) . 'Field' )
 			{
 				$topLevel = $locationType;
 				$topLevelForm = $locationForm;
@@ -65,7 +67,7 @@ class GooglemapsController extends Controller
 		/*
 		 * Default map center and zoom
 		 */
-		if( array_key_exists( 'latitude', $topLevelForm[ 'children' ] ) && ( $latForm = $topLevelForm[ 'children' ][ 'latitude' ][ 'vars' ][ 'value' ] ) <> 0 )
+		if( array_key_exists( 'latitude', $topLevelForm->children ) && ( $latForm = $topLevelForm->children[ 'latitude' ]->vars[ 'value' ] ) <> 0 )
 		{
 
 			/*
@@ -73,7 +75,7 @@ class GooglemapsController extends Controller
 			 */
 			$latitude = $latForm;
 
-			$longitude = $topLevelForm[ 'children' ][ 'longitude' ][ 'vars' ][ 'value' ];
+			$longitude = $topLevelForm->children[ 'longitude' ]->vars[ 'value' ];
 
 			$zoomDefault = $zoomResolved;
 		}
@@ -96,7 +98,7 @@ class GooglemapsController extends Controller
 		 */
 		if( ! isset( $acFields[ 0 ][ 'acInput' ] ) )
 		
-			$acFields[ 0 ][ 'acInput' ] = ( array_key_exists( 'long_name' , $topLevelForm[ 'children' ] ) ) ? $topLevelForm[ 'children' ][ 'long_name' ][ 'vars' ][ 'id' ] : $topLevelForm[ 'children' ][ 'name' ][ 'vars' ][ 'id' ];
+			$acFields[ 0 ][ 'acInput' ] = ( array_key_exists( 'long_name' , $topLevelForm->children ) ) ? $topLevelForm->children[ 'long_name' ]->vars[ 'id' ] : $topLevelForm->children[ 'name' ]->vars[ 'id' ];
 
 		/*
 		 * Default autocomplete Types
@@ -114,9 +116,9 @@ class GooglemapsController extends Controller
 		/*
 		 * Address autocomplete fallback
 		 */
-		if( $addressFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) && array_key_exists( 'long_address', $topLevelForm[ 'children' ] ) )
+		if( $addressFallback && $topLevel == 'location' && ! isset( $acFields[ 1 ][ 'acInput' ] ) && array_key_exists( 'long_address', $topLevelForm->children ) )
 		{
-			$acFields[ 1 ][ 'acInput' ] = ( array_key_exists( 'long_name', $topLevelForm[ 'children' ] ) ) ? $topLevelForm[ 'children' ][ 'long_address' ][ 'vars' ][ 'id' ] : $topLevelForm[ 'children' ][ 'address' ][ 'vars' ][ 'id' ];
+			$acFields[ 1 ][ 'acInput' ] = ( array_key_exists( 'long_name', $topLevelForm->children ) ) ? $topLevelForm->children[ 'long_address' ]->vars[ 'id' ] : $topLevelForm->children[ 'address' ]->vars[ 'id' ];
 			$acFields[ 1 ][ 'acOptions' ][ 'types' ] = array( 'geocode' );
 		}
 
@@ -126,21 +128,21 @@ class GooglemapsController extends Controller
 		$jsFieldIds = array();
 		$tmpLevel = $locationForm;
 
-		foreach( $this->container->parameters[ 'jul_location.options' ] as $level => $options )
+		foreach( $this->container->getParameter( 'jul_location.options' ) as $level => $options )
 		{
 			$fields = $options['fields'];
 			$tmpArray = array();
 			
-			if( array_key_exists( $level, $tmpLevel[ 'children' ] ) )
+			if( array_key_exists( $level, $tmpLevel->children ) )
 			{
-				$tmpLevel = $tmpLevel[ 'children' ][ $level ];
+				$tmpLevel = $tmpLevel->children[ $level ];
 
 				foreach( $fields as $field => $fieldArray )
 					
 					/*
 					 * Check if field is active in config && exists in the form
 					 */
-					if( $fieldArray[ 'enabled' ] && array_key_exists( $field, $tmpLevel[ 'children' ] )  ) $tmpArray[ $field ] = $tmpLevel[ 'children' ][ $field ][ 'vars' ][ 'id' ];
+					if( $fieldArray[ 'enabled' ] && array_key_exists( $field, $tmpLevel->children )  ) $tmpArray[ $field ] = $tmpLevel->children[ $field ]->vars[ 'id' ];
 			}
 
 			$jsFieldIds[ $level ] = $tmpArray;
