@@ -1,7 +1,7 @@
 JulLocationBundle for Symfony
 =============================
 
-**This version is for Symfony 2.2.*, 2.3.*, for Symfony 2.1.*, select the `1.0` branch**
+**This version is for Symfony 2.5.*. For Symfony 2.2.*, 2.3.*, select the 1.1 branch. For Symfony 2.1.*, select the `1.0` branch**
 
 JulLocationBundle provides 4 preconfigured location entities:
 
