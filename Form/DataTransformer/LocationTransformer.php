@@ -65,40 +65,43 @@ class LocationTransformer implements DataTransformerInterface
 	public function reverseTransform( $entityObject )
 	{
 		/*
-		 * Check if Entity exists
+		 * Check if Entity exists if demanded in configuration (default true)
 		 */
 		$locationRepository = new LocationRepository( $this->entityType, $this->om, $this->configOptions );
 		
-		$entityDB = $locationRepository->findEntityObject( $entityObject );
-		
-		if( $entityDB )
-		{
-			// if Location found in DB
+		if(!$entityObject->getId() || !$this->configOptions[$this->entityType]['update']){
+
+			$entityDB = $locationRepository->findEntityObject( $entityObject );
 			
-			if( $this->om->contains( $entityObject ) )
+			if( $entityDB )
+			{
+				// if Location found in DB
+				
+				if( $this->om->contains( $entityObject ) )
+				{
+					/*
+					 * if entity is managed ( update process ):
+					 * - restore the managed entity to its original state to preserve its data content
+					 * - return the DB entity
+					 */
+					$this->om->refresh( $entityObject );
+				}
+			
+				return $entityDB;
+			}
+			elseif( $this->om->contains( $entityObject ) )
 			{
 				/*
-				 * if entity is managed ( update process ):
-				 * - restore the managed entity to its original state to preserve its data content
-				 * - return the DB entity
+				 * if Location is not found in DB, but entity is managed ( update process ):
+				 * - clone the entity
+				 * - free the original from management to preserve its data content
+				 * - persist the clone
 				 */
-				$this->om->refresh( $entityObject );
+				$newEntity = clone $entityObject;
+				$newEntity->setSlug( null );	// to trigger Gedmo slug
+				$this->om->detach( $entityObject );
+				$entityObject = $newEntity;
 			}
-		
-			return $entityDB;
-		}
-		elseif( $this->om->contains( $entityObject ) )
-		{
-			/*
-			 * if Location is not found in DB, but entity is managed ( update process ):
-			 * - clone the entity
-			 * - free the original from management to preserve its data content
-			 * - persist the clone
-			 */
-			$newEntity = clone $entityObject;
-			$newEntity->setSlug( null );	// to trigger Gedmo slug
-			$this->om->detach( $entityObject );
-			$entityObject = $newEntity;
 		}
 		
 		$this->om->persist( $entityObject );
